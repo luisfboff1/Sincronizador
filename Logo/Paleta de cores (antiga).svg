@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        font-family: Inter-Regular, Inter;
+        font-size: 18px;
+        font-variation-settings: 'opsz' 14, 'wght' 400;
+      }
+
+      .cls-1, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        fill: #f58569;
+      }
+
+      .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13, .cls-14 {
+        stroke-width: 0px;
+      }
+
+      .cls-15 {
+        letter-spacing: 0em;
+      }
+
+      .cls-6 {
+        fill: #393f45;
+      }
+
+      .cls-16 {
+        letter-spacing: .02em;
+      }
+
+      .cls-2 {
+        fill: #010101;
+      }
+
+      .cls-17 {
+        letter-spacing: 0em;
+      }
+
+      .cls-7 {
+        fill: #969da3;
+      }
+
+      .cls-8 {
+        fill: #060707;
+      }
+
+      .cls-9, .cls-18, .cls-3 {
+        fill: #df3326;
+      }
+
+      .cls-4, .cls-18 {
+        font-family: BaiJamjuree-Bold, 'Bai Jamjuree';
+        font-size: 92.12px;
+        font-weight: 700;
+      }
+
+      .cls-10 {
+        fill: #f4f6f9;
+      }
+
+      .cls-19 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-11 {
+        fill: #fff7f5;
+      }
+
+      .cls-20 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-21 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-22 {
+        letter-spacing: 0em;
+      }
+
+      .cls-12 {
+        fill: #161c23;
+      }
+
+      .cls-23 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-24 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-13 {
+        fill: #501913;
+      }
+
+      .cls-14 {
+        fill: #ac2b24;
+      }
+
+      .cls-25 {
+        letter-spacing: 0em;
+      }
+
+      .cls-26 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-27 {
+        letter-spacing: -.01em;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1" data-name="Layer 1">
+    <g>
+      <rect class="cls-13" width="960" height="216"/>
+      <rect class="cls-14" y="216" width="960" height="216"/>
+      <rect class="cls-9" y="432" width="960" height="216"/>
+      <rect class="cls-5" y="648" width="960" height="216"/>
+      <rect class="cls-11" y="864" width="960" height="216"/>
+      <rect class="cls-8" x="960" width="960" height="216"/>
+      <rect class="cls-12" x="960" y="216" width="960" height="216"/>
+      <rect class="cls-6" x="960" y="432" width="960" height="216"/>
+      <rect class="cls-7" x="960" y="648" width="960" height="216"/>
+      <rect class="cls-10" x="960" y="864" width="960" height="216"/>
+      <text class="cls-4" transform="translate(84.68 572.85)"><tspan class="cls-15" x="0" y="0">A</tspan><tspan x="62.18" y="0">BCD</tspan></text>
+      <text class="cls-1" transform="translate(371.23 524.67)"><tspan x="0" y="0">Vi</tspan><tspan class="cls-24" x="16.78" y="0">v</tspan><tspan x="26.54" y="0">emos grandes indúst</tspan><tspan class="cls-17" x="204.85" y="0">r</tspan><tspan x="211.8" y="0">ias,</tspan><tspan x="0" y="24">Vi</tspan><tspan class="cls-24" x="16.78" y="24">v</tspan><tspan x="26.54" y="24">emos grandes desafios,</tspan><tspan x="0" y="48">vi</tspan><tspan class="cls-24" x="14.48" y="48">v</tspan><tspan x="24.24" y="48">emos in</tspan><tspan class="cls-24" x="90.85" y="48">o</tspan><tspan class="cls-22" x="101.29" y="48">v</tspan><tspan x="111.32" y="48">a</tspan><tspan class="cls-17" x="121.43" y="48">ç</tspan><tspan x="131.89" y="48">ão abe</tspan><tspan class="cls-16" x="189.47" y="48">r</tspan><tspan class="cls-25" x="196.53" y="48">t</tspan><tspan x="202.51" y="48">a.</tspan></text>
+      <text class="cls-18" transform="translate(1033.97 343.48)"><tspan class="cls-15" x="0" y="0">A</tspan><tspan x="62.18" y="0">BCD</tspan></text>
+      <text class="cls-1" transform="translate(1320.52 295.3)"><tspan x="0" y="0">Vi</tspan><tspan class="cls-24" x="16.78" y="0">v</tspan><tspan x="26.54" y="0">emos grandes indúst</tspan><tspan class="cls-17" x="204.85" y="0">r</tspan><tspan x="211.8" y="0">ias,</tspan><tspan x="0" y="24">Vi</tspan><tspan class="cls-24" x="16.78" y="24">v</tspan><tspan x="26.54" y="24">emos grandes desafios,</tspan><tspan x="0" y="48">vi</tspan><tspan class="cls-24" x="14.48" y="48">v</tspan><tspan x="24.24" y="48">emos in</tspan><tspan class="cls-24" x="90.85" y="48">o</tspan><tspan class="cls-22" x="101.29" y="48">v</tspan><tspan x="111.32" y="48">a</tspan><tspan class="cls-17" x="121.43" y="48">ç</tspan><tspan x="131.89" y="48">ão abe</tspan><tspan class="cls-16" x="189.47" y="48">r</tspan><tspan class="cls-25" x="196.53" y="48">t</tspan><tspan x="202.51" y="48">a.</tspan></text>
+      <text class="cls-1" transform="translate(786.29 544.9)"><tspan x="0" y="0">E</tspan><tspan class="cls-24" x="10.82" y="0">v</tspan><tspan x="20.58" y="0">com</tspan><tspan class="cls-27" x="57.43" y="0">-</tspan><tspan x="65.5" y="0">300</tspan></text>
+      <text class="cls-1" transform="translate(817.89 562.89)"><tspan x="0" y="0">DF3326</tspan></text>
+      <text class="cls-1" transform="translate(785.58 324)"><tspan x="0" y="0">E</tspan><tspan class="cls-24" x="10.82" y="0">v</tspan><tspan x="20.58" y="0">com-400</tspan></text>
+      <text class="cls-1" transform="translate(814.52 344.21)"><tspan class="cls-19" x="0" y="0">A</tspan><tspan x="11.8" y="0">C2B</tspan><tspan class="cls-21" x="47.71" y="0">2</tspan><tspan x="58.4" y="0">4</tspan></text>
+      <text class="cls-1" transform="translate(786.53 108)"><tspan x="0" y="0">E</tspan><tspan class="cls-24" x="10.82" y="0">v</tspan><tspan x="20.58" y="0">com-500</tspan></text>
+      <text class="cls-1" transform="translate(828 125.67)"><tspan x="0" y="0">501913</tspan></text>
+      <text class="cls-1" transform="translate(786.83 763.72)"><tspan x="0" y="0">E</tspan><tspan class="cls-24" x="10.82" y="0">v</tspan><tspan x="20.58" y="0">com</tspan><tspan class="cls-20" x="57.43" y="0">-</tspan><tspan x="65.1" y="0">200</tspan></text>
+      <text class="cls-1" transform="translate(819.37 782.42)"><tspan x="0" y="0">F58569</tspan></text>
+      <text class="cls-2" transform="translate(789.88 972)"><tspan x="0" y="0">E</tspan><tspan class="cls-24" x="10.82" y="0">v</tspan><tspan x="20.58" y="0">com-100</tspan></text>
+      <text class="cls-2" transform="translate(822.52 995.92)"><tspan x="0" y="0">FFF7F5</tspan></text>
+      <text class="cls-3" transform="translate(1751.56 544.9)"><tspan x="0" y="0">Gr</tspan><tspan class="cls-26" x="20.21" y="0">a</tspan><tspan class="cls-23" x="30.05" y="0">y</tspan><tspan class="cls-27" x="39.45" y="0">-</tspan><tspan x="47.53" y="0">300</tspan></text>
+      <text class="cls-3" transform="translate(1765.51 563.07)"><tspan x="0" y="0">393F45</tspan></text>
+      <text class="cls-3" transform="translate(1750.84 324)"><tspan x="0" y="0">Gr</tspan><tspan class="cls-26" x="20.21" y="0">a</tspan><tspan class="cls-23" x="30.05" y="0">y</tspan><tspan x="39.45" y="0">-400</tspan></text>
+      <text class="cls-3" transform="translate(1770.79 344.42)"><tspan x="0" y="0">161C23</tspan></text>
+      <text class="cls-3" transform="translate(1751.79 108)"><tspan x="0" y="0">Gr</tspan><tspan class="cls-26" x="20.21" y="0">a</tspan><tspan class="cls-23" x="30.05" y="0">y</tspan><tspan x="39.45" y="0">-500</tspan></text>
+      <text class="cls-3" transform="translate(1766.15 125.84)"><tspan x="0" y="0">06</tspan><tspan class="cls-24" x="22.52" y="0">0</tspan><tspan class="cls-21" x="33.52" y="0">7</tspan><tspan class="cls-24" x="43.43" y="0">0</tspan><tspan x="54.43" y="0">7</tspan></text>
+      <text class="cls-3" transform="translate(1751.03 763.93)"><tspan x="0" y="0">Gr</tspan><tspan class="cls-26" x="20.21" y="0">a</tspan><tspan class="cls-23" x="30.05" y="0">y</tspan><tspan class="cls-20" x="39.45" y="0">-</tspan><tspan x="47.13" y="0">200</tspan></text>
+      <text class="cls-3" transform="translate(1762.45 782.6)"><tspan x="0" y="0">969</tspan><tspan class="cls-19" x="33.49" y="0">D</tspan><tspan x="45.86" y="0">A3</tspan></text>
+      <text class="cls-3" transform="translate(1755.15 972)"><tspan x="0" y="0">Gr</tspan><tspan class="cls-26" x="20.21" y="0">a</tspan><tspan class="cls-23" x="30.05" y="0">y</tspan><tspan x="39.45" y="0">-100</tspan></text>
+      <text class="cls-3" transform="translate(1766.01 995.74)"><tspan x="0" y="0">F4F6F9</tspan></text>
+    </g>
+  </g>
+</svg>
