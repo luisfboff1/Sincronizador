@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sincronizador — Evcomx</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            evx: {
+              900:'#182028',800:'#22252A',700:'#30373E',650:'#373940',
+              600:'#575A60',500:'#7B7D81',400:'#A0A1A3',300:'#C5C4C6',
+              200:'#DBDDDE',150:'#E5E5E6',100:'#F8F9FA',50:'#FFFFFF',
+              o900:'#E63812',o800:'#E84917',o700:'#EC683A',o600:'#EE4623',
+              o500:'#F18B65',o400:'#F27044',o300:'#F6AD92',o200:'#FACCBB',
+              o100:'#FCE0D8',o50:'#FFF9F8',
+            },
+            brand: '#EE4623',
+          },
+          fontFamily: {
+            heading: ['"Bai Jamjuree"', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <!-- React 18 Dev (required for Babel standalone) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for in-browser JSX -->
+  <script src="https://unpkg.com/@babel/standalone@7.24.0/babel.min.js"></script>
+  <!-- Chart.js 4 (replaces broken Recharts) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background: #F8F9FA; color: #182028; }
+    .font-heading { font-family: 'Bai Jamjuree', sans-serif; }
+
+    /* ─── Subtle Grid Background (white-medical inspired) ─── */
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ─── Glass Card (cool-dashboard inspired) ─── */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid #E5E5E6;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(24,32,40,0.05);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      box-shadow: 0 8px 40px rgba(24,32,40,0.09);
+      border-color: #C5C4C6;
+    }
+
+    /* ─── Gradient Border Card (cool-dashboard mask technique) ─── */
+    .gradient-border { position: relative; }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(238,70,35,0.18), rgba(238,70,35,0));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ─── Animations (gemini2 + white-medical inspired) ─── */
+    @keyframes reveal-up {
+      0%   { clip-path: inset(100% 0 0 0); transform: translateY(18px); opacity: 0; }
+      100% { clip-path: inset(0 0 0 0); transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slide-up {
+      0%   { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fade-in {
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes pulse-brand {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+    @keyframes glow-brand {
+      0%, 100% { box-shadow: 0 0 8px rgba(238,70,35,0.25); }
+      50% { box-shadow: 0 0 24px rgba(238,70,35,0.5); }
+    }
+    @keyframes flow-particle {
+      0%   { left: -12px; opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { left: calc(100% + 12px); opacity: 0; }
+    }
+
+    /* Reveal cascade for tab content children */
+    .tab-reveal > * {
+      opacity: 0;
+      animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .tab-reveal > *:nth-child(1) { animation-delay: 0s; }
+    .tab-reveal > *:nth-child(2) { animation-delay: 0.08s; }
+    .tab-reveal > *:nth-child(3) { animation-delay: 0.16s; }
+    .tab-reveal > *:nth-child(4) { animation-delay: 0.24s; }
+    .tab-reveal > *:nth-child(5) { animation-delay: 0.32s; }
+    .tab-reveal > *:nth-child(6) { animation-delay: 0.40s; }
+
+    /* Step indicators */
+    .s-done   { background: #30373E; color: #F8F9FA; }
+    .s-active { background: #EE4623; color: #fff; box-shadow: 0 0 0 4px rgba(238,70,35,0.18); }
+    .s-wait   { background: #E5E5E6; color: #A0A1A3; }
+
+    /* Tabs */
+    .tab-on  { background: #EE4623; color: #fff; box-shadow: 0 2px 12px rgba(238,70,35,0.3); }
+    .tab-off { color: #575A60; background: transparent; }
+    .tab-off:hover { background: #FFF9F8; color: #EE4623; }
+
+    /* Pipeline connector */
+    .pipe-conn {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      min-width: 48px; height: 2px;
+      background: linear-gradient(90deg, #DBDDDE, #C5C4C6, #DBDDDE);
+    }
+    .pipe-conn::after {
+      content: ''; position: absolute; right: -5px;
+      width: 0; height: 0;
+      border-left: 7px solid #C5C4C6;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+    }
+    .pipe-conn .flow-dot {
+      position: absolute; top: -1px; width: 16px; height: 4px; border-radius: 2px;
+      background: linear-gradient(90deg, transparent, #EE4623, transparent);
+      animation: flow-particle 2.2s linear infinite;
+    }
+
+    /* Corrida chip */
+    .corrida-chip {
+      font-family: 'Bai Jamjuree', sans-serif;
+      font-weight: 700; font-size: 13px;
+      padding: 8px 14px; border-radius: 14px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default; text-align: center;
+    }
+    .corrida-chip:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+
+    /* Pipeline slot */
+    .pipe-slot {
+      min-width: 106px; min-height: 48px;
+      border: 2px dashed #DBDDDE; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.35s ease;
+    }
+    .pipe-slot.filled { border-style: solid; border-color: transparent; }
+
+    /* Timing table */
+    .t-row { transition: background 0.2s ease; }
+    .t-row:hover { background: #FFF9F8; }
+
+    /* Scrollbar */
+    .sb::-webkit-scrollbar { width: 5px; height: 5px; }
+    .sb::-webkit-scrollbar-thumb { background: #C5C4C6; border-radius: 3px; }
+    .sb::-webkit-scrollbar-track { background: transparent; }
+
+    /* Countdown text glow */
+    .cd-glow { text-shadow: 0 0 24px rgba(238,70,35,0.35); }
+
+    /* InfoTooltip */
+    .info-tip { position: relative; display: inline-flex; }
+    .info-tip-btn {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; font-style: italic; font-family: 'Bai Jamjuree', serif;
+      color: #A0A1A3; background: #F8F9FA; border: 1.5px solid #E5E5E6;
+      cursor: pointer; transition: all 0.25s ease; user-select: none;
+    }
+    .info-tip-btn:hover { color: #EE4623; border-color: #EE4623; background: #FFF9F8; }
+    .info-tip-pop {
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      min-width: 220px; padding: 12px 14px; border-radius: 14px;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(16px);
+      border: 1px solid #E5E5E6; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      z-index: 100; animation: reveal-up 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .info-tip-pop::after {
+      content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border-left: 6px solid transparent; border-right: 6px solid transparent;
+      border-top: 6px solid #E5E5E6;
+    }
+  </style>
+</head>
+<body class="bg-grid">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+    /* ================================================================
+       COLOR TOKENS (Evcomx only)
+       ================================================================ */
+    const C = {
+      brand:'#EE4623', b90:'#E63812', b75:'#E84917', b60:'#EC683A',
+      b45:'#F27044', b30:'#F18B65', b15:'#F6AD92',
+      bg0:'#FFF9F8', bg1:'#FCE0D8', bg2:'#FACCBB',
+      g900:'#182028', g800:'#22252A', g700:'#30373E', g650:'#373940',
+      g600:'#575A60', g500:'#7B7D81', g400:'#A0A1A3', g300:'#C5C4C6',
+      g200:'#DBDDDE', g150:'#E5E5E6', g100:'#F8F9FA', w:'#FFFFFF',
+    };
+    const STAGE = {
+      WAIT:{ bg:'#FACCBB', accent:'#F18B65', fg:'#E84917' },
+      FEA: { bg:'#FFF9F8', accent:'#EE4623', fg:'#EE4623' },
+      FP:  { bg:'#FCE0D8', accent:'#F27044', fg:'#E84917' },
+      VD:  { bg:'#E5E5E6', accent:'#575A60', fg:'#30373E' },
+      LC:  { bg:'#22252A', accent:'#EE4623', fg:'#F8F9FA' },
+      DONE:{ bg:'#30373E', accent:'#22252A', fg:'#F8F9FA' },
+    };
+
+    /* ================================================================
+       MOCK DATA — realistic 6-digit IDs
+       ================================================================ */
+    const MOCK = {
+      ts: '15/03/2026 07:30',
+      /* Pipeline: Sistema */
+      sis: [
+        { id:'131513', stg:'WAIT', sub:'AGUARDANDO', pos:'WAIT' },
+        { id:'131512', stg:'FEA',  sub:'HEATING',   pos:'FEA' },
+        { id:'131511', stg:'FP',   sub:'TRATAMENTO', pos:'FP', car:1 },
+        { id:'131510', stg:'FP',   sub:'AQUECIMENTO',pos:'FP', car:2 },
+        { id:'131509', stg:'VD',   sub:'DEEP_VAC',   pos:'VD', tank:1 },
+        { id:'131508', stg:'LC',   sub:'VAZAMENTO',   pos:'LC', arm:1 },
+        { id:'131507', stg:'DONE', sub:'CONCLUÍDO',   pos:'DONE' },
+      ],
+      /* Pipeline: Operador (discrepancy: no 131510 at FP-Carro 2) */
+      ope: [
+        { id:'131513', stg:'WAIT', sub:'AGUARDANDO', pos:'WAIT' },
+        { id:'131512', stg:'FEA',  sub:'HEATING',   pos:'FEA' },
+        { id:'131511', stg:'FP',   sub:'TRATAMENTO', pos:'FP', car:1 },
+        { id:'131509', stg:'VD',   sub:'DEEP_VAC',   pos:'VD', tank:1 },
+        { id:'131508', stg:'LC',   sub:'VAZAMENTO',   pos:'LC', arm:1 },
+        { id:'131507', stg:'DONE', sub:'CONCLUÍDO',   pos:'DONE' },
+      ],
+      lcd: { min:18, sec:32, id:'131508' },
+      log: [
+        { t:'07:02', m:'Corrida 131512 chegou no FEA', k:'evt' },
+        { t:'06:58', m:'Corrida 131511 entrou em TRATAMENTO — FP Carro 1', k:'evt' },
+        { t:'06:45', m:'Corrida 131511 iniciou AQUECIMENTO — FP Carro 1', k:'evt' },
+        { t:'06:30', m:'Corrida 131510 chegou no FP — Carro 2', k:'evt' },
+        { t:'06:15', m:'Corrida 131511 chegou no FP — Carro 1', k:'evt' },
+        { t:'06:00', m:'Corrida 131510 saiu do FEA', k:'trn' },
+        { t:'05:50', m:'Corrida 131509 chegou no VD — Tanque 1', k:'evt' },
+        { t:'05:45', m:'Corrida 131508 início de vazamento — LC Braço 1', k:'evt' },
+        { t:'05:30', m:'Corrida 131508 peso real detectado — LC', k:'evt' },
+        { t:'05:10', m:'Corrida 131508 chegou na torre — LC Braço 1', k:'evt' },
+        { t:'04:55', m:'Corrida 131508 saiu do VD — Tanque 1', k:'trn' },
+        { t:'04:00', m:'Corrida 131507 fim de lingotamento — LC', k:'ok' },
+      ],
+      alerts: [
+        { m:'Corrida 131511 no FP deve sair em ~15 min para manter sincronismo com LC', s:'warn' },
+        { m:'Tempo no VD acima da média — 131509 com +3 min sobre média das últimas 5', s:'warn' },
+        { m:'LC Braço 1 ativo — próxima troca de panela prevista em 18 min', s:'info' },
+      ],
+      feaT: [
+        { id:'131507', aq:42, pa:3, vz:8,  tt:53 },
+        { id:'131506', aq:38, pa:5, vz:7,  tt:50 },
+        { id:'131505', aq:45, pa:2, vz:9,  tt:56 },
+        { id:'131504', aq:40, pa:4, vz:8,  tt:52 },
+        { id:'131503', aq:43, pa:3, vz:7,  tt:53 },
+      ],
+      fpT: [
+        { id:'131507', aq:25, tr:18, vz:6, tt:49 },
+        { id:'131506', aq:22, tr:20, vz:7, tt:49 },
+        { id:'131505', aq:28, tr:15, vz:5, tt:48 },
+        { id:'131504', aq:24, tr:19, vz:6, tt:49 },
+        { id:'131503', aq:26, tr:17, vz:7, tt:50 },
+      ],
+      vdT: [
+        { id:'131507', st:2, en:18, ex:22 },
+        { id:'131506', st:3, en:20, ex:24 },
+        { id:'131505', st:2, en:17, ex:21 },
+        { id:'131504', st:3, en:19, ex:23 },
+        { id:'131503', st:2, en:18, ex:22 },
+      ],
+      lcT: [
+        { id:'131507', in_:3, pe:5, vz:32, fp:38, fn:40 },
+        { id:'131506', in_:4, pe:6, vz:30, fp:36, fn:38 },
+        { id:'131505', in_:3, pe:5, vz:35, fp:40, fn:42 },
+        { id:'131504', in_:4, pe:6, vz:28, fp:34, fn:36 },
+        { id:'131503', in_:3, pe:5, vz:33, fp:39, fn:41 },
+      ],
+      /* Chart data generators */
+      cFEAe: Array.from({length:50},(_,i)=>({x:i,y:i<3?100*i:i<42?300+i*600:i<45?25500-(i-42)*3000:500})),
+      cFEAi: Array.from({length:50},(_,i)=>({x:i,y:i<40?0.2*Math.sin(i/5):i<43?(i-40)*4:i<45?12-(i-43)*6:i<48?-5+(i-45)*2:0})),
+      cFEAw: Array.from({length:50},(_,i)=>({x:i,y:i<10?0:i<15?37:i<20?0:i<42?0:i<45?(i-42)*20:i<48?60:60-(i-48)*40})),
+      cFPe:  Array.from({length:50},(_,i)=>({x:i,y:i<2?0:i<30?200+i*400:i<45?12200-(i-30)*200:9200})),
+      cFPt:  Array.from({length:50},(_,i)=>({x:i,y:1500+i*5+Math.sin(i)*10})),
+      cVDf:  Array.from({length:25},(_,i)=>({x:i,y:i<2?0:i<20?0.8+Math.sin(i/3)*0.3:0})),
+      cVDv:  Array.from({length:25},(_,i)=>({x:i,y:i<3?0:i<18?(i-3)*12:180})),
+      cVDp:  Array.from({length:25},(_,i)=>({x:i,y:i<2?1013:i<18?Math.max(50,1013-i*60):50+(i-18)*120})),
+      cLCa:  Array.from({length:45},(_,i)=>({x:i,y:i<3?10+i*30:i<5?100+i*3:i<35?115-(i-5)*2:55-(i-35)*5})),
+      cLCr:  Array.from({length:45},(_,i)=>({x:i,y:i<5?0:i<8?(i-5)*25:i<35?75-(i-8)*1.5:i<40?34.5-(i-35)*5:2})),
+      cLCv1: Array.from({length:45},(_,i)=>({x:i,y:i<5?0:i<38?2.5+Math.sin(i/4)*0.3:0})),
+      cLCv2: Array.from({length:45},(_,i)=>({x:i,y:i<5?0:i<38?2.4+Math.cos(i/4)*0.2:0})),
+      cLCv3: Array.from({length:45},(_,i)=>({x:i,y:i<5?0:i<38?2.6+Math.sin(i/3)*0.25:0})),
+    };
+
+    /* ================================================================
+       ICON COMPONENT
+       ================================================================ */
+    const I = ({n, s=16, cl=''}) => {
+      const d = {
+        clock:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+        alert:<><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></>,
+        info:<><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></>,
+        check:<><path d="M20 6 9 17l-5-5"/></>,
+        chev:<><path d="m9 18 6-6-6-6"/></>,
+        flame:<><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></>,
+        act:<><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></>,
+        timer:<><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></>,
+        hist:<><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></>,
+        arrR:<><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>,
+        zap:<><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>,
+        eye:<><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>,
+      };
+      return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`inline-block align-middle ${cl}`}>{d[n]}</svg>;
+    };
+
+    /* ================================================================
+       EVCOMX LOGO (inline SVG)
+       ================================================================ */
+    const Logo = ({w=105}) => (
+      <svg width={w} viewBox="0 0 3824.48 402.58" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#EE4623">
+          <path d="M95.59,315.07v-88.58h226.48v-75.52H0v152.95c0,11.7,4.24,23,11.95,31.81l44.06,50.36c9.17,10.49,22.43,16.5,36.36,16.5h390.72v-75.48l-375.42.04c-6.67,0-12.08-5.41-12.08-12.08Z"/>
+          <rect x="47.79" y="0" width="435.3" height="75.62"/>
+          <path d="M2440.03,16.5c-9.17-10.49-22.43-16.5-36.36-16.5h-378.88c-13.93,0-27.19,6.01-36.36,16.5l-44.06,50.37c-7.7,8.81-11.96,20.11-11.96,31.81v205.24c0,11.7,4.25,23,11.96,31.81l44.06,50.37c9.17,10.49,22.43,16.5,36.36,16.5h378.88c13.93,0,27.18-6.01,36.36-16.5l44.06-50.37c7.7-8.81,11.95-20.11,11.95-31.81V98.67c0-11.7-4.24-23-11.95-31.81l-44.06-50.37ZM2405.36,314.97c0,6.67-5.41,12.07-12.07,12.07h-358.36c-6.67,0-12.08-5.41-12.08-12.08V87.7c0-6.66,5.41-12.07,12.07-12.07h358.36c6.67,0,12.08,5.41,12.08,12.08v227.27Z"/>
+          <path d="M1344.25,16.5l-44.06,50.37c-7.7,8.81-11.96,20.11-11.96,31.81v205.24c0,11.7,4.25,23,11.96,31.81l44.06,50.37c9.17,10.49,22.43,16.5,36.36,16.5h390.72v-75.48l-375.42.04c-6.67,0-12.07-5.4-12.07-12.07V87.51c0-6.67,5.4-12.07,12.07-12.07l375.42.04V0h-390.72c-13.93,0-27.18,6.01-36.36,16.5Z"/>
+          <polygon points="3341.39 0 3531.08 201.3 3341.38 402.58 3445.06 402.58 3634.76 201.3 3445.06 0 3341.39 0"/>
+          <polygon points="3824.48 0 3720.8 0 3634.77 91.28 3686.62 146.28 3824.48 0"/>
+          <polygon points="3634.77 311.33 3720.77 402.58 3824.45 402.58 3686.62 256.32 3634.77 311.33"/>
+          <path d="M2938.68,246.39L2747.43,0h-90.43v402.58h90.43V123.08l151.1,194.67c4.57,5.89,11.62,9.34,19.08,9.34h42.13c7.46,0,14.51-3.45,19.08-9.34l151.11-194.67v279.5h90.68V0h-90.68l-191.25,246.39Z"/>
+          <path d="M1071.93,0l-186.26,327.2L699.41,0h-95.54l222.22,390.37c4.29,7.54,12.31,12.2,20.99,12.2h77.18c8.68,0,16.7-4.66,20.99-12.2L1167.47,0h-95.54Z"/>
+        </g>
+      </svg>
+    );
+
+    /* ================================================================
+       BASE UI COMPONENTS
+       ================================================================ */
+    const Card = ({children, className='', accent=false}) => (
+      <div className={`glass-card ${accent?'gradient-border':''} p-5 sm:p-6 ${className}`}>{children}</div>
+    );
+    const Badge = ({children, color=C.brand, bg=C.bg0}) => (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide whitespace-nowrap"
+        style={{background:bg, color, border:`1px solid ${color}18`}}>{children}</span>
+    );
+    const Title = ({icon, children, badge, sub}) => (
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-heading font-bold text-[15px] tracking-tight flex items-center gap-2" style={{color:C.g900}}>
+            {icon && <I n={icon} s={15} cl="opacity-50" />}{children}
+          </h3>
+          {sub && <p className="text-[11px] mt-0.5" style={{color:C.g500}}>{sub}</p>}
+        </div>
+        {badge}
+      </div>
+    );
+    const Pill = ({children, on, onClick}) => (
+      <button onClick={onClick}
+        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${on?'text-white shadow-md':'hover:text-brand'}`}
+        style={on?{background:C.brand,boxShadow:`0 2px 12px ${C.brand}40`}:{background:C.g150,color:C.g600}}>
+        {children}
+      </button>
+    );
+
+    /* ================================================================
+       CHART.JS WRAPPER
+       ================================================================ */
+    const Crt = ({cfg, h=195}) => {
+      const ref = useRef(null);
+      const cRef = useRef(null);
+      useEffect(() => {
+        if(cRef.current) cRef.current.destroy();
+        cRef.current = new Chart(ref.current.getContext('2d'), cfg);
+        return () => { if(cRef.current) cRef.current.destroy(); };
+      }, [cfg]);
+      return <div style={{height:h,position:'relative',width:'100%'}}><canvas ref={ref}/></div>;
+    };
+    const lineGfx = (data, label, color, fill=false) => ({
+      type:'line',
+      data:{ labels:data.map(d=>d.x), datasets:[{
+        label, data:data.map(d=>d.y), borderColor:color,
+        backgroundColor:fill?`${color}18`:'transparent', fill, borderWidth:2,
+        pointRadius:0, tension:0.35,
+      }]},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{
+          backgroundColor:C.g800, titleColor:C.g100, bodyColor:C.g200,
+          borderColor:`${color}40`, borderWidth:1, cornerRadius:12, padding:10,
+          titleFont:{family:'Bai Jamjuree',weight:'600'},
+        }},
+        scales:{
+          x:{ grid:{color:`${C.g200}80`,drawBorder:false}, ticks:{color:C.g500,font:{size:9}},
+            title:{display:true,text:'min',color:C.g400,font:{size:9}} },
+          y:{ grid:{color:`${C.g200}80`,drawBorder:false}, ticks:{color:C.g500,font:{size:9}} },
+        },
+        animation:{ duration:1100, easing:'easeOutQuart' },
+      },
+    });
+    const multiLine = (sets, labels) => ({
+      type:'line',
+      data:{ labels, datasets: sets.map(s=>({
+        label:s.l, data:s.d, borderColor:s.c, borderWidth:2, pointRadius:0, tension:0.35, fill:false,
+      }))},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:14,color:C.g600,font:{size:10}}},
+          tooltip:{backgroundColor:C.g800,titleColor:C.g100,bodyColor:C.g200,cornerRadius:12,padding:10},
+        },
+        scales:{
+          x:{grid:{color:`${C.g200}80`,drawBorder:false},ticks:{color:C.g500,font:{size:9}},title:{display:true,text:'min',color:C.g400,font:{size:9}}},
+          y:{grid:{color:`${C.g200}80`,drawBorder:false},ticks:{color:C.g500,font:{size:9}}},
+        },
+        animation:{ duration:1100, easing:'easeOutQuart' },
+      },
+    });
+
+    /* ================================================================
+       LC COUNTDOWN (Header)
+       ================================================================ */
+    const LCCountdown = () => {
+      const [t,setT] = useState(MOCK.lcd.min*60+MOCK.lcd.sec);
+      useEffect(()=>{ const id=setInterval(()=>setT(v=>Math.max(0,v-1)),1000); return()=>clearInterval(id); },[]);
+      const m=Math.floor(t/60), s=t%60, urg=m<5;
+      return (
+        <div className="flex items-center gap-3 px-5 py-2 rounded-2xl font-heading font-bold text-sm transition-all"
+          style={{
+            background:urg?C.bg0:C.g150, color:urg?C.brand:C.g700,
+            border:`1px solid ${urg?C.brand+'28':C.g200}`,
+            animation:urg?'glow-brand 2s ease-in-out infinite':'none',
+          }}>
+          <I n="timer" s={15}/>
+          <span className="text-[10px] font-semibold opacity-60 uppercase tracking-wider">LC</span>
+          <span className="opacity-30">|</span>
+          <span className="text-xs">{MOCK.lcd.id}</span>
+          <span className={`text-xl tabular-nums tracking-tight ${urg?'cd-glow':''}`}>
+            {String(m).padStart(2,'0')}:{String(s).padStart(2,'0')}
+          </span>
+        </div>
+      );
+    };
+
+    /* ================================================================
+       HEADER
+       ================================================================ */
+    const Header = () => (
+      <header className="sticky top-0 z-50" style={{background:'rgba(255,255,255,0.82)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',borderBottom:`1px solid ${C.g200}`}}>
+        <div className="max-w-[1440px] mx-auto px-6 h-[60px] flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Logo />
+            <div className="h-7 w-px" style={{background:C.g200}}/>
+            <div>
+              <h1 className="font-heading font-bold text-[13px] tracking-[0.12em] uppercase" style={{color:C.g900}}>Sincronizador</h1>
+              <span className="text-[10px] tracking-wide" style={{color:C.g500}}>Aciaria — Tempo Real</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-5">
+            <span className="hidden sm:block text-[11px] tabular-nums" style={{color:C.g400}}>{MOCK.ts}</span>
+            <LCCountdown />
+          </div>
+        </div>
+      </header>
+    );
+
+    /* ================================================================
+       TAB NAVIGATION
+       ================================================================ */
+    const tabDef = [
+      {id:'geral',l:'Geral',ic:'act'},{id:'fea',l:'FEA',ic:'flame'},
+      {id:'fp',l:'FP',ic:'flame'},{id:'vd',l:'VD',ic:'zap'},{id:'lc',l:'LC',ic:'timer'},
+    ];
+    const TabNav = ({cur,set}) => (
+      <nav style={{background:'rgba(255,255,255,0.55)',backdropFilter:'blur(10px)',borderBottom:`1px solid ${C.g200}`}}>
+        <div className="max-w-[1440px] mx-auto px-6 flex gap-1.5 pt-2">
+          {tabDef.map(t=>(
+            <button key={t.id} onClick={()=>set(t.id)}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-t-xl text-[11px] font-bold tracking-wide transition-all duration-300 ${cur===t.id?'tab-on':'tab-off'}`}>
+              <I n={t.ic} s={13}/>{t.l}
+            </button>
+          ))}
+        </div>
+      </nav>
+    );
+
+    /* ================================================================
+       MICRO STEP PROGRESS
+       ================================================================ */
+    const Steps = ({steps, cur, label}) => (
+      <div className="mb-5">
+        {label && <div className="text-[10px] font-bold uppercase tracking-[0.14em] mb-2.5" style={{color:C.g500}}>{label}</div>}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {steps.map((st,i)=>{
+            const cls = i<cur?'s-done':i===cur?'s-active':'s-wait';
+            return (
+              <React.Fragment key={i}>
+                <div className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[11px] font-bold transition-all duration-500 ${cls}`}>
+                  {i<cur && <I n="check" s={10}/>}{st}
+                </div>
+                {i<steps.length-1 && <I n="chev" s={11} cl="opacity-15"/>}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    );
+
+    /* ================================================================
+       TIMING TABLE
+       ================================================================ */
+    const TTable = ({cols,rows,avg,pred}) => (
+      <div className="overflow-x-auto rounded-xl" style={{border:`1px solid ${C.g200}`}}>
+        <table className="w-full text-xs">
+          <thead><tr style={{background:C.g100}}>
+            {cols.map((c,i)=><th key={i} className="text-left py-2.5 px-3.5 font-bold uppercase tracking-wider" style={{color:C.g600,fontSize:10}}>{c}</th>)}
+          </tr></thead>
+          <tbody>
+            {rows.map((r,ri)=>(
+              <tr key={ri} className="t-row" style={{borderTop:`1px solid ${C.g150}`}}>
+                {r.map((c,ci)=><td key={ci} className="py-2.5 px-3.5 tabular-nums" style={{color:ci===0?C.g700:C.g800,fontWeight:ci===0?700:400}}>{c}</td>)}
+              </tr>
+            ))}
+            {avg && <tr style={{background:C.g100,borderTop:`1px solid ${C.g200}`}}>
+              {avg.map((c,i)=><td key={i} className="py-2.5 px-3.5 font-bold tabular-nums" style={{color:C.g700}}>{c}</td>)}
+            </tr>}
+            {pred && <tr style={{background:C.bg0,borderTop:`1px solid ${C.brand}18`}}>
+              {pred.map((c,i)=><td key={i} className="py-2.5 px-3.5 font-black tabular-nums" style={{color:C.brand}}>{c}</td>)}
+            </tr>}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    /* ================================================================
+       INFO TOOLTIP — avg time (i) icon
+       ================================================================ */
+    const InfoTooltip = ({items}) => {
+      const [open,setOpen]=useState(false);
+      const ref=useRef(null);
+      useEffect(()=>{
+        const h=e=>{if(ref.current && !ref.current.contains(e.target)) setOpen(false);};
+        document.addEventListener('mousedown',h); return()=>document.removeEventListener('mousedown',h);
+      },[]);
+      return (
+        <div className="info-tip" ref={ref}>
+          <button className="info-tip-btn" onClick={()=>setOpen(!open)} title="Média últimas 5 corridas">i</button>
+          {open && (
+            <div className="info-tip-pop">
+              <div className="text-[9px] font-bold uppercase tracking-wider mb-2" style={{color:C.g500}}>Média — Últimas 5 Corridas</div>
+              <div className="space-y-1.5">
+                {items.map((it,i)=>(
+                  <div key={i} className="flex items-center justify-between gap-3">
+                    <span className="text-[10px] font-semibold" style={{color:C.g600}}>{it.label}</span>
+                    <span className="text-[11px] font-bold tabular-nums" style={{color:C.g800}}>{it.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    /* ================================================================
+       PIPELINE DIAGRAM (matching DASHBOARD MVP.jpeg layout)
+       ================================================================ */
+    const Chip = ({id, stg, sub}) => {
+      const s = STAGE[stg] || STAGE.WAIT;
+      return (
+        <div className="corrida-chip" style={{background:s.bg,color:s.fg,border:`2px solid ${s.accent}25`}}>
+          <div className="font-bold text-[13px] leading-tight">{id}</div>
+          {sub && <div className="text-[8px] font-semibold opacity-55 uppercase mt-0.5">{sub}</div>}
+        </div>
+      );
+    };
+    const Slot = ({label, corrida}) => (
+      <div className="flex flex-col items-center gap-1.5">
+        <div className="text-[8px] font-bold uppercase tracking-[0.1em] whitespace-nowrap" style={{color:C.g500}}>{label}</div>
+        <div className={`pipe-slot ${corrida?'filled':''}`}>
+          {corrida ? <Chip id={corrida.id} stg={corrida.stg} sub={corrida.sub}/> : <span className="text-[10px] italic" style={{color:C.g400}}>Livre</span>}
+        </div>
+      </div>
+    );
+    const Conn = ({label}) => (
+      <div className="flex flex-col items-center gap-1 min-w-[50px] px-1">
+        {label && <div className="text-[7px] font-bold uppercase tracking-wider whitespace-nowrap" style={{color:C.g400}}>{label}</div>}
+        <div className="pipe-conn w-full"><div className="flow-dot"/></div>
+      </div>
+    );
+    const StageGroup = ({title, children, color=C.g600}) => (
+      <div className="flex flex-col items-center gap-1.5">
+        <div className="text-[8px] font-bold uppercase tracking-[0.1em]" style={{color}}>{title}</div>
+        <div className="flex flex-col gap-2">{children}</div>
+      </div>
+    );
+
+    const Pipeline = ({title, source, data}) => {
+      const f = (stg,eq,num) => data.find(c=> c.stg===stg && (eq?c[eq]===num:true));
+      const wait = data.find(c=>c.stg==='WAIT');
+      const fea  = data.find(c=>c.stg==='FEA');
+      const fp1  = f('FP','car',1);
+      const fp2  = f('FP','car',2);
+      const vd1  = f('VD','tank',1);
+      const vd2  = f('VD','tank',2);
+      const lc   = data.find(c=>c.stg==='LC');
+      const done = data.find(c=>c.stg==='DONE');
+      return (
+        <Card accent>
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <div className="text-[9px] font-bold uppercase tracking-[0.14em]" style={{color:C.g500}}>Pipeline</div>
+              <h3 className="font-heading font-bold text-lg tracking-tight" style={{color:C.g900}}>{title}</h3>
+            </div>
+            <Badge color={C.g600} bg={C.g150}>Fonte: {source} | {MOCK.ts}</Badge>
+          </div>
+          <div className="flex items-center gap-3 overflow-x-auto pb-3 sb px-2" style={{minHeight:130}}>
+            <Slot label="Aguardando FEA" corrida={wait}/>
+            <Conn/>
+            <Slot label="IN FEA" corrida={fea}/>
+            <Conn label="FEA → FP"/>
+            <StageGroup title="Forno Panela" color={STAGE.FP.fg}>
+              <Slot label="Carro 1" corrida={fp1}/>
+              <Slot label="Carro 2" corrida={fp2}/>
+            </StageGroup>
+            <Conn label="FP → VD"/>
+            <StageGroup title="Vácuo Desgasif." color={STAGE.VD.fg}>
+              <Slot label="Tanque 1" corrida={vd1}/>
+              <Slot label="Tanque 2" corrida={vd2}/>
+            </StageGroup>
+            <Conn label="VD → LC"/>
+            <Slot label="IN LC" corrida={lc}/>
+            <Conn/>
+            <div className="flex flex-col items-center gap-1.5">
+              <div className="text-[8px] font-bold uppercase tracking-[0.1em]" style={{color:C.g500}}>Concluído</div>
+              <div className="pipe-slot filled" style={{background:C.g800,minWidth:106}}>
+                {done ? (
+                  <div className="text-center">
+                    <div className="font-bold text-[13px]" style={{color:C.g100}}>{done.id}</div>
+                    <div className="text-[9px] opacity-40" style={{color:C.g300}}>✓ Finalizado</div>
+                  </div>
+                ) : <span className="text-[10px]" style={{color:C.g400}}>—</span>}
+              </div>
+            </div>
+          </div>
+        </Card>
+      );
+    };
+
+    /* ================================================================
+       GERAL TAB
+       ================================================================ */
+    const StatusCards = () => {
+      const active = MOCK.sis.filter(c=>c.stg!=='DONE'&&c.stg!=='WAIT');
+      return (
+        <Card>
+          <Title icon="zap">Corridas Ativas</Title>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {active.map(c=>{
+              const s=STAGE[c.stg];
+              const dark = c.stg==='LC';
+              return (
+                <div key={c.id} className="rounded-2xl p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-default"
+                  style={{background:s.bg,border:`1.5px solid ${s.accent}20`}}>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="font-heading font-bold text-base" style={{color:s.fg}}>{c.id}</span>
+                    <Badge color={s.fg} bg={`${s.accent}12`}>{c.stg}</Badge>
+                  </div>
+                  <div className="space-y-1.5 text-[11px]" style={{color:dark?C.g300:C.g600}}>
+                    <div>Etapa: <span className="font-bold" style={{color:s.fg}}>{c.sub}</span></div>
+                    <div className="flex items-center gap-1"><I n="clock" s={11}/> Chegou: {c.arrival||'—'}</div>
+                    <div className="flex items-center gap-1"><I n="timer" s={11}/> Previsão: {c.predicted||'—'}</div>
+                    <div>Decorrido: <span className="font-black tabular-nums" style={{color:s.fg}}>{c.elapsed} min</span></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      );
+    };
+
+    const HistLog = () => (
+      <Card className="h-full">
+        <Title icon="hist">Histórico de Eventos</Title>
+        <div className="max-h-60 overflow-y-auto sb space-y-1.5">
+          {MOCK.log.map((h,i)=>(
+            <div key={i} className="flex items-start gap-3 text-xs py-1.5" style={{opacity:0,animation:`slide-up 0.4s ease-out ${i*45}ms forwards`}}>
+              <span className="tabular-nums whitespace-nowrap font-semibold" style={{color:C.g500}}>{h.t}</span>
+              <div className="flex-1">
+                <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-bold mb-0.5"
+                  style={{
+                    background:h.k==='ok'?C.g700:h.k==='trn'?C.bg1:C.g150,
+                    color:h.k==='ok'?C.w:h.k==='trn'?C.b60:C.g600,
+                  }}>
+                  {h.k==='ok'?'Concluído':h.k==='trn'?'Transporte':'Evento'}
+                </span>
+                <div style={{color:C.g700}}>{h.m}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    );
+
+    const Alerts = () => (
+      <Card className="h-full">
+        <Title icon="alert">Avisos de Sincronismo</Title>
+        <div className="space-y-2.5">
+          {MOCK.alerts.map((a,i)=>(
+            <div key={i} className="rounded-xl p-3.5 flex items-start gap-2.5 text-xs transition-all duration-300 hover:scale-[1.01]"
+              style={{
+                background:a.s==='warn'?C.bg0:C.g100,
+                border:`1px solid ${a.s==='warn'?C.brand+'1A':C.g200}`,
+                color:a.s==='warn'?C.b90:C.g700,
+              }}>
+              <I n={a.s==='warn'?'alert':'info'} s={14} cl="flex-shrink-0 mt-0.5"/>
+              <span className="leading-relaxed">{a.m}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+    );
+
+    /* ── Discrepancy highlight between Sistema and Operador ── */
+    const Discrepancies = () => {
+      const sisIds = new Set(MOCK.sis.filter(c=>c.stg==='FP').map(c=>c.id));
+      const opeIds = new Set(MOCK.ope.filter(c=>c.stg==='FP').map(c=>c.id));
+      const onlySis = [...sisIds].filter(id=>!opeIds.has(id));
+      const onlyOpe = [...opeIds].filter(id=>!sisIds.has(id));
+      if(!onlySis.length && !onlyOpe.length) return null;
+      return (
+        <Card accent>
+          <Title icon="eye" badge={<Badge color={C.b90} bg={C.bg1}>Discrepância Detectada</Badge>}>
+            Comparação Sistema vs Operador
+          </Title>
+          <div className="space-y-2 text-xs">
+            {onlySis.map(id=>(
+              <div key={id} className="rounded-xl p-3 flex items-center gap-2" style={{background:C.bg0,border:`1px solid ${C.brand}18`}}>
+                <I n="alert" s={13} cl="text-brand"/>
+                <span style={{color:C.g700}}>
+                  Corrida <strong style={{color:C.brand}}>{id}</strong> detectada pelo <strong>Sistema</strong> no FP, mas <strong>não registrada</strong> pelo Operador.
+                </span>
+              </div>
+            ))}
+            {onlyOpe.map(id=>(
+              <div key={id} className="rounded-xl p-3 flex items-center gap-2" style={{background:C.g100,border:`1px solid ${C.g200}`}}>
+                <I n="info" s={13} cl="opacity-50"/>
+                <span style={{color:C.g700}}>
+                  Corrida <strong>{id}</strong> registrada pelo <strong>Operador</strong>, mas não detectada pelo Sistema.
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      );
+    };
+
+    const GeralTab = () => (
+      <div className="tab-reveal space-y-5">
+        <Pipeline title="Sistema" source="Sistema" data={MOCK.sis}/>
+        <Pipeline title="Operador" source="Operador" data={MOCK.ope}/>
+        <Discrepancies/>
+        <StatusCards/>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <HistLog/>
+          <Alerts/>
+        </div>
+      </div>
+    );
+
+    /* ================================================================
+       FEA TAB
+       ================================================================ */
+    const FEATab = () => {
+      const es=['IDLE','INÍCIO','HEATING','PAUSA','HEATING','FIM'];
+      const is_=['DISTURBIO','INCLINANDO','PICO_MAX','QUEDA','NEGATIVO','RETORNO'];
+      const ws=['PANELA_CHEGOU','TARA','VAZ_INÍCIO','PLATO','PANELA_SAIU','TARA_RESET'];
+      const d=MOCK.feaT, av=a=>(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1);
+      const cols=['Corrida','Aquec. (min)','Pausas','Vazamento (min)','Total (min)'];
+      const rows=d.map(r=>[r.id,r.aq,r.pa,r.vz,r.tt]);
+      const avgR=['Média (5)',av(d.map(r=>r.aq)),av(d.map(r=>r.pa)),av(d.map(r=>r.vz)),av(d.map(r=>r.tt))];
+      const pred=['Prev. 131512','~42','~3','~8','~53'];
+      const feaAvgItems=[
+        {label:'Aquecimento',value:av(d.map(r=>r.aq))+' min'},
+        {label:'Pausas',value:av(d.map(r=>r.pa))},
+        {label:'Vazamento',value:av(d.map(r=>r.vz))+' min'},
+        {label:'Total',value:av(d.map(r=>r.tt))+' min'},
+      ];
+      return (
+        <div className="tab-reveal space-y-5">
+          <Card accent>
+            <div className="flex items-center gap-2">
+              <Title icon="flame" badge={<Badge>131512 — HEATING</Badge>}>FEA — Micro Etapas (3 Caminhos Paralelos)</Title>
+              <InfoTooltip items={feaAvgItems}/>
+            </div>
+            <Steps steps={es} cur={2} label="⚡ Energia"/>
+            <Steps steps={is_} cur={-1} label="📐 Inclinação"/>
+            <Steps steps={ws} cur={0} label="⚖️ Peso Panela"/>
+          </Card>
+          <Card>
+            <Title>Tempos por Etapa — Últimas 5 Corridas</Title>
+            <TTable cols={cols} rows={rows} avg={avgR} pred={pred}/>
+          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <Card><Title>Energia Acumulada (kWh)</Title><Crt cfg={lineGfx(MOCK.cFEAe,'Energia',C.brand,true)}/></Card>
+            <Card><Title>Ângulo Inclinação (°)</Title><Crt cfg={lineGfx(MOCK.cFEAi,'Ângulo',C.b45)}/></Card>
+            <Card><Title>Peso Carro Panela (t)</Title><Crt cfg={lineGfx(MOCK.cFEAw,'Peso',C.g700,true)}/></Card>
+          </div>
+        </div>
+      );
+    };
+
+    /* ================================================================
+       FP TAB
+       ================================================================ */
+    const FPTab = () => {
+      const [car,setCar]=useState(1);
+      const st=['CHEGADA','AQUECIMENTO','TRATAMENTO','VAZAMENTO','SAÍDA'];
+      const d=MOCK.fpT, av=a=>(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1);
+      const cols=['Corrida','Aquec. (min)','Tratamento (min)','Vazamento (min)','Total (min)'];
+      const rows=d.map(r=>[r.id,r.aq,r.tr,r.vz,r.tt]);
+      const avgR=['Média (5)',av(d.map(r=>r.aq)),av(d.map(r=>r.tr)),av(d.map(r=>r.vz)),av(d.map(r=>r.tt))];
+      const pred=['Prev. 131511','~25','~18','~6','~49'];
+      const fpAvgItems=[
+        {label:'Aquecimento',value:av(d.map(r=>r.aq))+' min'},
+        {label:'Tratamento',value:av(d.map(r=>r.tr))+' min'},
+        {label:'Vazamento',value:av(d.map(r=>r.vz))+' min'},
+        {label:'Total',value:av(d.map(r=>r.tt))+' min'},
+      ];
+      return (
+        <div className="tab-reveal space-y-5">
+          <Card accent>
+            <div className="flex items-center gap-2">
+              <Title icon="flame" badge={<Badge color={STAGE.FP.fg} bg={STAGE.FP.bg}>131511 — TRATAMENTO</Badge>}>
+                FP — Forno Panela — Micro Etapas
+              </Title>
+              <InfoTooltip items={fpAvgItems}/>
+            </div>
+            <div className="flex gap-2 mb-4"><Pill on={car===1} onClick={()=>setCar(1)}>Carro 1</Pill><Pill on={car===2} onClick={()=>setCar(2)}>Carro 2</Pill></div>
+            <Steps steps={st} cur={car===1?2:1}/>
+            {car===2 && <div className="text-xs italic" style={{color:C.g500}}>Carro 2 — 131510 em AQUECIMENTO</div>}
+          </Card>
+          <Card>
+            <Title>Tempos por Etapa — Últimas 5 (Carro {car})</Title>
+            <TTable cols={cols} rows={rows} avg={avgR} pred={pred}/>
+          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <Card><Title>Energia Acumulada (kWh)</Title><Crt cfg={lineGfx(MOCK.cFPe,'Energia',C.b45,true)}/></Card>
+            <Card><Title>Temperatura (°C)</Title><Crt cfg={lineGfx(MOCK.cFPt,'Temp',C.brand)}/></Card>
+          </div>
+        </div>
+      );
+    };
+
+    /* ================================================================
+       VD TAB
+       ================================================================ */
+    const VDTab = () => {
+      const [tk,setTk]=useState(1);
+      const st=['VD_ARRIVAL','DEEP_VAC_START','DEEP_VAC_END','VD_EXIT'];
+      const d=MOCK.vdT, av=a=>(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1);
+      const cols=['Corrida','Deep Vac Start','Deep Vac End','Exit (min)'];
+      const rows=d.map(r=>[r.id,r.st,r.en,r.ex]);
+      const avgR=['Média (5)',av(d.map(r=>r.st)),av(d.map(r=>r.en)),av(d.map(r=>r.ex))];
+      const pred=['Prev. 131509','~2','~18','~22'];
+      const vdAvgItems=[
+        {label:'Deep Vac Start',value:av(d.map(r=>r.st))+' min'},
+        {label:'Deep Vac End',value:av(d.map(r=>r.en))+' min'},
+        {label:'Exit',value:av(d.map(r=>r.ex))+' min'},
+      ];
+      return (
+        <div className="tab-reveal space-y-5">
+          <Card accent>
+            <div className="flex items-center gap-2">
+              <Title icon="zap" badge={<Badge color={STAGE.VD.fg} bg={STAGE.VD.bg}>131509 — DEEP_VAC</Badge>}>
+                VD — Vácuo Desgaseificação — Micro Etapas
+              </Title>
+              <InfoTooltip items={vdAvgItems}/>
+            </div>
+            <div className="flex gap-2 mb-4"><Pill on={tk===1} onClick={()=>setTk(1)}>Tanque 1</Pill><Pill on={tk===2} onClick={()=>setTk(2)}>Tanque 2</Pill></div>
+            <Steps steps={st} cur={tk===1?1:-1}/>
+            {tk===2 && <div className="text-xs italic" style={{color:C.g500}}>Tanque 2 — Livre (sem corrida ativa)</div>}
+          </Card>
+          <Card>
+            <Title>Tempos por Etapa — Últimas 5 (Tanque {tk})</Title>
+            <TTable cols={cols} rows={rows} avg={avgR} pred={pred}/>
+          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <Card><Title>Vazão (m³/min)</Title><Crt cfg={lineGfx(MOCK.cVDf,'Vazão',C.g700)}/></Card>
+            <Card><Title>Volume Acumulado (m³)</Title><Crt cfg={lineGfx(MOCK.cVDv,'Volume',C.g600,true)}/></Card>
+            <Card><Title>Pressão Vácuo (Pa)</Title><Crt cfg={lineGfx(MOCK.cVDp,'Pressão',C.g800)}/></Card>
+          </div>
+        </div>
+      );
+    };
+
+    /* ================================================================
+       LC TAB
+       ================================================================ */
+    const LCTab = () => {
+      const [arm,setArm]=useState(1);
+      const st=['CHEGADA_TORRE','INÍCIO_LC','PESO_REAL','VAZAMENTO','FIM_PESO_REAL','FINAL_LC'];
+      const d=MOCK.lcT, av=a=>(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1);
+      const cols=['Corrida','Início','Peso Real','Vazamento','Fim Peso','Final (min)'];
+      const rows=d.map(r=>[r.id,r.in_,r.pe,r.vz,r.fp,r.fn]);
+      const avgR=['Média (5)',av(d.map(r=>r.in_)),av(d.map(r=>r.pe)),av(d.map(r=>r.vz)),av(d.map(r=>r.fp)),av(d.map(r=>r.fn))];
+      const pred=['Prev. 131508','~3','~5','~32','~38','~40'];
+      /* LC countdown (inline big version) */
+      const [t,setT]=useState(MOCK.lcd.min*60+MOCK.lcd.sec);
+      useEffect(()=>{ const id=setInterval(()=>setT(v=>Math.max(0,v-1)),1000); return()=>clearInterval(id); },[]);
+      const m=Math.floor(t/60),s=t%60,urg=m<5;
+      const lcAvgItems=[
+        {label:'Início',value:av(d.map(r=>r.in_))+' min'},
+        {label:'Peso Real',value:av(d.map(r=>r.pe))+' min'},
+        {label:'Vazamento',value:av(d.map(r=>r.vz))+' min'},
+        {label:'Fim Peso',value:av(d.map(r=>r.fp))+' min'},
+        {label:'Final',value:av(d.map(r=>r.fn))+' min'},
+      ];
+      return (
+        <div className="tab-reveal space-y-5">
+          {/* Prominent Countdown */}
+          <Card accent className="text-center overflow-hidden">
+            <div className="py-5">
+              <div className="text-[10px] font-bold uppercase tracking-[0.14em] mb-2" style={{color:C.g500}}>
+                Cronômetro LC — Corrida {MOCK.lcd.id} — Braço {arm}
+              </div>
+              <div className={`font-heading font-black text-6xl sm:text-7xl tabular-nums tracking-tighter ${urg?'cd-glow':''}`}
+                style={{color:urg?C.brand:C.g800,animation:urg?'pulse-brand 1.5s ease-in-out infinite':'none'}}>
+                {String(m).padStart(2,'0')}:{String(s).padStart(2,'0')}
+              </div>
+              <div className="text-xs mt-2" style={{color:C.g500}}>Tempo restante estimado para troca de panela</div>
+              {/* Progress bar */}
+              <div className="mx-auto mt-4 w-full max-w-md h-1.5 rounded-full overflow-hidden" style={{background:C.g200}}>
+                <div className="h-full rounded-full transition-all duration-1000"
+                  style={{width:`${Math.max(0,(1-t/(MOCK.lcd.min*60+MOCK.lcd.sec))*100)}%`,background:urg?C.brand:C.g700}}/>
+              </div>
+            </div>
+          </Card>
+          <Card accent>
+            <div className="flex items-center gap-2">
+              <Title icon="timer" badge={<Badge color={C.w} bg={C.g800}>131508 — VAZAMENTO</Badge>}>LC — Lingotamento Contínuo — Micro Etapas</Title>
+              <InfoTooltip items={lcAvgItems}/>
+            </div>
+            <div className="flex gap-2 mb-4"><Pill on={arm===1} onClick={()=>setArm(1)}>Braço 1</Pill><Pill on={arm===2} onClick={()=>setArm(2)}>Braço 2</Pill></div>
+            <Steps steps={st} cur={arm===1?3:-1}/>
+            {arm===2 && <div className="text-xs italic" style={{color:C.g500}}>Braço 2 — Livre (aguardando próxima panela)</div>}
+          </Card>
+          <Card>
+            <Title>Tempos por Etapa — Últimas 5 (Braço {arm})</Title>
+            <TTable cols={cols} rows={rows} avg={avgR} pred={pred}/>
+          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <Card><Title>Peso Braço (t)</Title><Crt cfg={lineGfx(MOCK.cLCa,'Peso',C.g700)}/></Card>
+            <Card><Title>Peso Real Torre (t)</Title><Crt cfg={lineGfx(MOCK.cLCr,'Peso',C.b90,true)}/></Card>
+            <Card>
+              <Title>Velocidade dos Veios (m/min)</Title>
+              <Crt cfg={multiLine([
+                {l:'Veio 1',d:MOCK.cLCv1.map(d=>d.y),c:C.brand},
+                {l:'Veio 2',d:MOCK.cLCv2.map(d=>d.y),c:C.g600},
+                {l:'Veio 3',d:MOCK.cLCv3.map(d=>d.y),c:C.b45},
+              ],MOCK.cLCv1.map(d=>d.x))}/>
+            </Card>
+          </div>
+        </div>
+      );
+    };
+
+    /* ================================================================
+       APP
+       ================================================================ */
+    const App = () => {
+      const [tab,setTab]=useState('geral');
+      const [k,setK]=useState(0);
+      const go = id => { setTab(id); setK(n=>n+1); };
+      const T={geral:GeralTab,fea:FEATab,fp:FPTab,vd:VDTab,lc:LCTab}[tab];
+      return (
+        <div className="min-h-screen font-body">
+          <Header/>
+          <TabNav cur={tab} set={go}/>
+          <main className="max-w-[1440px] mx-auto px-6 py-6" key={k}><T/></main>
+          <footer className="text-center py-5 text-[10px] font-medium tracking-wider"
+            style={{color:C.g400,borderTop:`1px solid ${C.g200}`,background:C.w}}>
+            Sincronizador v0.2 — Protótipo — © Evcomx {new Date().getFullYear()}
+          </footer>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

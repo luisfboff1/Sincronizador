@@ -1,0 +1,27 @@
+# Backups de protótipos
+*_v1.html
+*_v2.html
+
+# Referências de design (não são parte do projeto)
+evcomx.com.br/
+animations-gemini2/
+
+# Logos e assets pesados
+Logo/
+Report/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
