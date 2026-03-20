@@ -161,9 +161,30 @@
       font-weight: 700; font-size: 13px;
       padding: 8px 14px; border-radius: 14px;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: default; text-align: center;
+      cursor: pointer; text-align: center;
     }
     .corrida-chip:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+
+    /* Note Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(24,32,40,0.35); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      animation: fade-in 0.2s ease;
+    }
+    .modal-card {
+      background: #fff; border-radius: 20px; padding: 28px;
+      min-width: 380px; max-width: 480px; width: 90%;
+      box-shadow: 0 24px 64px rgba(24,32,40,0.18);
+      animation: reveal-up 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .modal-card textarea {
+      width: 100%; min-height: 100px; border-radius: 12px; padding: 12px;
+      border: 1.5px solid #E5E5E6; font-family: Inter, sans-serif; font-size: 13px;
+      color: #182028; resize: vertical; outline: none; transition: border 0.2s;
+    }
+    .modal-card textarea:focus { border-color: #EE4623; }
+    .modal-card textarea::placeholder { color: #A0A1A3; }
 
     /* Pipeline slot */
     .pipe-slot {
@@ -251,15 +272,6 @@
         { id:'131508', stg:'LC',   sub:'VAZAMENTO',   pos:'LC', arm:1 },
         { id:'131507', stg:'DONE', sub:'CONCLUÍDO',   pos:'DONE' },
       ],
-      /* Pipeline: Operador (discrepancy: no 131510 at FP-Carro 2) */
-      ope: [
-        { id:'131513', stg:'WAIT', sub:'AGUARDANDO', pos:'WAIT' },
-        { id:'131512', stg:'FEA',  sub:'HEATING',   pos:'FEA' },
-        { id:'131511', stg:'FP',   sub:'TRATAMENTO', pos:'FP', car:1 },
-        { id:'131509', stg:'VD',   sub:'DEEP_VAC',   pos:'VD', tank:1 },
-        { id:'131508', stg:'LC',   sub:'VAZAMENTO',   pos:'LC', arm:1 },
-        { id:'131507', stg:'DONE', sub:'CONCLUÍDO',   pos:'DONE' },
-      ],
       lcd: { min:18, sec:32, id:'131508' },
       log: [
         { t:'07:02', m:'Corrida 131512 chegou no FEA', k:'evt' },
@@ -275,11 +287,7 @@
         { t:'04:55', m:'Corrida 131508 saiu do VD — Tanque 1', k:'trn' },
         { t:'04:00', m:'Corrida 131507 fim de lingotamento — LC', k:'ok' },
       ],
-      alerts: [
-        { m:'Corrida 131511 no FP deve sair em ~15 min para manter sincronismo com LC', s:'warn' },
-        { m:'Tempo no VD acima da média — 131509 com +3 min sobre média das últimas 5', s:'warn' },
-        { m:'LC Braço 1 ativo — próxima troca de panela prevista em 18 min', s:'info' },
-      ],
+
       feaT: [
         { id:'131507', aq:42, pa:3, vz:8,  tt:53 },
         { id:'131506', aq:38, pa:5, vz:7,  tt:50 },
@@ -594,20 +602,20 @@
     /* ================================================================
        PIPELINE DIAGRAM (matching DASHBOARD MVP.jpeg layout)
        ================================================================ */
-    const Chip = ({id, stg, sub}) => {
+    const Chip = ({id, stg, sub, onClick}) => {
       const s = STAGE[stg] || STAGE.WAIT;
       return (
-        <div className="corrida-chip" style={{background:s.bg,color:s.fg,border:`2px solid ${s.accent}25`}}>
+        <div className="corrida-chip" onClick={e=>{e.stopPropagation();onClick&&onClick();}} style={{background:s.bg,color:s.fg,border:`2px solid ${s.accent}25`}}>
           <div className="font-bold text-[13px] leading-tight">{id}</div>
           {sub && <div className="text-[8px] font-semibold opacity-55 uppercase mt-0.5">{sub}</div>}
         </div>
       );
     };
-    const Slot = ({label, corrida}) => (
+    const Slot = ({label, corrida, onNote}) => (
       <div className="flex flex-col items-center gap-1.5">
         <div className="text-[8px] font-bold uppercase tracking-[0.1em] whitespace-nowrap" style={{color:C.g500}}>{label}</div>
         <div className={`pipe-slot ${corrida?'filled':''}`}>
-          {corrida ? <Chip id={corrida.id} stg={corrida.stg} sub={corrida.sub}/> : <span className="text-[10px] italic" style={{color:C.g400}}>Livre</span>}
+          {corrida ? <Chip id={corrida.id} stg={corrida.stg} sub={corrida.sub} onClick={()=>onNote&&onNote(corrida)}/> : <span className="text-[10px] italic" style={{color:C.g400}}>Livre</span>}
         </div>
       </div>
     );
@@ -624,7 +632,38 @@
       </div>
     );
 
-    const Pipeline = ({title, source, data}) => {
+    /* ================================================================
+       NOTE MODAL
+       ================================================================ */
+    const NoteModal = ({corrida, notes, onSave, onClose}) => {
+      const [txt,setTxt]=useState(notes[corrida.id]||'');
+      return (
+        <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+          <div className="modal-card">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="font-heading font-bold text-base" style={{color:C.g900}}>Notas — Corrida {corrida.id}</h3>
+                <p className="text-[11px] mt-0.5" style={{color:C.g500}}>{corrida.stg} — {corrida.sub}</p>
+              </div>
+              <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center text-lg hover:bg-gray-100 transition" style={{color:C.g500}}>×</button>
+            </div>
+            <textarea value={txt} onChange={e=>setTxt(e.target.value)} placeholder="Ex: Corrida não estava aqui nesse horário..."/>
+            <div className="flex justify-end gap-2 mt-4">
+              <button onClick={onClose} className="px-4 py-2 rounded-xl text-xs font-bold transition" style={{color:C.g600,background:C.g150}}>Cancelar</button>
+              <button onClick={()=>{onSave(corrida.id,txt);onClose();}} className="px-4 py-2 rounded-xl text-xs font-bold text-white transition hover:opacity-90" style={{background:C.brand}}>Salvar Nota</button>
+            </div>
+            {notes[corrida.id] && (
+              <div className="mt-3 p-3 rounded-xl text-[11px]" style={{background:C.g100,color:C.g600,border:`1px solid ${C.g200}`}}>
+                <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{color:C.g500}}>Nota salva:</div>
+                {notes[corrida.id]}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const Pipeline = ({title, source, data, onNote}) => {
       const f = (stg,eq,num) => data.find(c=> c.stg===stg && (eq?c[eq]===num:true));
       const wait = data.find(c=>c.stg==='WAIT');
       const fea  = data.find(c=>c.stg==='FEA');
@@ -643,22 +682,22 @@
             </div>
             <Badge color={C.g600} bg={C.g150}>Fonte: {source} | {MOCK.ts}</Badge>
           </div>
-          <div className="flex items-center gap-3 overflow-x-auto pb-3 sb px-2" style={{minHeight:130}}>
-            <Slot label="Aguardando FEA" corrida={wait}/>
+          <div className="flex items-center justify-center gap-3 overflow-x-auto pb-3 sb px-4" style={{minHeight:150}}>
+            <Slot label="Aguardando FEA" corrida={wait} onNote={onNote}/>
             <Conn/>
-            <Slot label="IN FEA" corrida={fea}/>
+            <Slot label="IN FEA" corrida={fea} onNote={onNote}/>
             <Conn label="FEA → FP"/>
             <StageGroup title="Forno Panela" color={STAGE.FP.fg}>
-              <Slot label="Carro 1" corrida={fp1}/>
-              <Slot label="Carro 2" corrida={fp2}/>
+              <Slot label="Carro 1" corrida={fp1} onNote={onNote}/>
+              <Slot label="Carro 2" corrida={fp2} onNote={onNote}/>
             </StageGroup>
             <Conn label="FP → VD"/>
             <StageGroup title="Vácuo Desgasif." color={STAGE.VD.fg}>
-              <Slot label="Tanque 1" corrida={vd1}/>
-              <Slot label="Tanque 2" corrida={vd2}/>
+              <Slot label="Tanque 1" corrida={vd1} onNote={onNote}/>
+              <Slot label="Tanque 2" corrida={vd2} onNote={onNote}/>
             </StageGroup>
             <Conn label="VD → LC"/>
-            <Slot label="IN LC" corrida={lc}/>
+            <Slot label="IN LC" corrida={lc} onNote={onNote}/>
             <Conn/>
             <div className="flex flex-col items-center gap-1.5">
               <div className="text-[8px] font-bold uppercase tracking-[0.1em]" style={{color:C.g500}}>Concluído</div>
@@ -684,23 +723,17 @@
       return (
         <Card>
           <Title icon="zap">Corridas Ativas</Title>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
             {active.map(c=>{
               const s=STAGE[c.stg];
-              const dark = c.stg==='LC';
               return (
-                <div key={c.id} className="rounded-2xl p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-default"
+                <div key={c.id} className="rounded-xl p-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-md cursor-default"
                   style={{background:s.bg,border:`1.5px solid ${s.accent}20`}}>
-                  <div className="flex items-center justify-between mb-2.5">
-                    <span className="font-heading font-bold text-base" style={{color:s.fg}}>{c.id}</span>
-                    <Badge color={s.fg} bg={`${s.accent}12`}>{c.stg}</Badge>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-heading font-bold text-sm" style={{color:s.fg}}>{c.id}</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md" style={{background:`${s.accent}12`,color:s.fg}}>{c.stg}</span>
                   </div>
-                  <div className="space-y-1.5 text-[11px]" style={{color:dark?C.g300:C.g600}}>
-                    <div>Etapa: <span className="font-bold" style={{color:s.fg}}>{c.sub}</span></div>
-                    <div className="flex items-center gap-1"><I n="clock" s={11}/> Chegou: {c.arrival||'—'}</div>
-                    <div className="flex items-center gap-1"><I n="timer" s={11}/> Previsão: {c.predicted||'—'}</div>
-                    <div>Decorrido: <span className="font-black tabular-nums" style={{color:s.fg}}>{c.elapsed} min</span></div>
-                  </div>
+                  <div className="text-[10px] font-semibold" style={{color:s.fg}}>{c.sub}</div>
                 </div>
               );
             })}
@@ -709,94 +742,83 @@
       );
     };
 
-    const HistLog = () => (
-      <Card className="h-full">
-        <Title icon="hist">Histórico de Eventos</Title>
-        <div className="max-h-60 overflow-y-auto sb space-y-1.5">
-          {MOCK.log.map((h,i)=>(
-            <div key={i} className="flex items-start gap-3 text-xs py-1.5" style={{opacity:0,animation:`slide-up 0.4s ease-out ${i*45}ms forwards`}}>
-              <span className="tabular-nums whitespace-nowrap font-semibold" style={{color:C.g500}}>{h.t}</span>
-              <div className="flex-1">
-                <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-bold mb-0.5"
-                  style={{
-                    background:h.k==='ok'?C.g700:h.k==='trn'?C.bg1:C.g150,
-                    color:h.k==='ok'?C.w:h.k==='trn'?C.b60:C.g600,
-                  }}>
-                  {h.k==='ok'?'Concluído':h.k==='trn'?'Transporte':'Evento'}
-                </span>
-                <div style={{color:C.g700}}>{h.m}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
-    );
-
-    const Alerts = () => (
-      <Card className="h-full">
-        <Title icon="alert">Avisos de Sincronismo</Title>
-        <div className="space-y-2.5">
-          {MOCK.alerts.map((a,i)=>(
-            <div key={i} className="rounded-xl p-3.5 flex items-start gap-2.5 text-xs transition-all duration-300 hover:scale-[1.01]"
-              style={{
-                background:a.s==='warn'?C.bg0:C.g100,
-                border:`1px solid ${a.s==='warn'?C.brand+'1A':C.g200}`,
-                color:a.s==='warn'?C.b90:C.g700,
-              }}>
-              <I n={a.s==='warn'?'alert':'info'} s={14} cl="flex-shrink-0 mt-0.5"/>
-              <span className="leading-relaxed">{a.m}</span>
-            </div>
-          ))}
-        </div>
-      </Card>
-    );
-
-    /* ── Discrepancy highlight between Sistema and Operador ── */
-    const Discrepancies = () => {
-      const sisIds = new Set(MOCK.sis.filter(c=>c.stg==='FP').map(c=>c.id));
-      const opeIds = new Set(MOCK.ope.filter(c=>c.stg==='FP').map(c=>c.id));
-      const onlySis = [...sisIds].filter(id=>!opeIds.has(id));
-      const onlyOpe = [...opeIds].filter(id=>!sisIds.has(id));
-      if(!onlySis.length && !onlyOpe.length) return null;
+    /* ================================================================
+       EVENT LOG — full-width interactive shadcn-style table
+       ================================================================ */
+    const EventLog = () => {
+      const [filter,setFilter]=useState('all');
+      const [search,setSearch]=useState('');
+      const filtered = MOCK.log.filter(h=>{
+        if(filter!=='all' && h.k!==filter) return false;
+        if(search && !h.m.toLowerCase().includes(search.toLowerCase())) return false;
+        return true;
+      });
+      const types={all:'Todos',evt:'Evento',trn:'Transporte',ok:'Concluído'};
       return (
-        <Card accent>
-          <Title icon="eye" badge={<Badge color={C.b90} bg={C.bg1}>Discrepância Detectada</Badge>}>
-            Comparação Sistema vs Operador
-          </Title>
-          <div className="space-y-2 text-xs">
-            {onlySis.map(id=>(
-              <div key={id} className="rounded-xl p-3 flex items-center gap-2" style={{background:C.bg0,border:`1px solid ${C.brand}18`}}>
-                <I n="alert" s={13} cl="text-brand"/>
-                <span style={{color:C.g700}}>
-                  Corrida <strong style={{color:C.brand}}>{id}</strong> detectada pelo <strong>Sistema</strong> no FP, mas <strong>não registrada</strong> pelo Operador.
-                </span>
+        <Card>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <Title icon="hist">Histórico de Eventos</Title>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <input value={search} onChange={e=>setSearch(e.target.value)}
+                  placeholder="Buscar evento..."
+                  className="pl-3 pr-8 py-1.5 rounded-lg text-xs border outline-none transition focus:border-brand"
+                  style={{borderColor:C.g200,background:C.w,color:C.g800,width:180}}/>
+                {search && <button onClick={()=>setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-sm" style={{color:C.g400}}>×</button>}
               </div>
-            ))}
-            {onlyOpe.map(id=>(
-              <div key={id} className="rounded-xl p-3 flex items-center gap-2" style={{background:C.g100,border:`1px solid ${C.g200}`}}>
-                <I n="info" s={13} cl="opacity-50"/>
-                <span style={{color:C.g700}}>
-                  Corrida <strong>{id}</strong> registrada pelo <strong>Operador</strong>, mas não detectada pelo Sistema.
-                </span>
-              </div>
-            ))}
+              {Object.entries(types).map(([k,v])=>(
+                <button key={k} onClick={()=>setFilter(k)}
+                  className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${filter===k?'text-white':'hover:opacity-80'}`}
+                  style={filter===k?{background:C.brand}:{background:C.g150,color:C.g600}}>
+                  {v}
+                </button>
+              ))}
+            </div>
           </div>
+          <div className="overflow-x-auto rounded-xl" style={{border:`1px solid ${C.g200}`}}>
+            <table className="w-full text-xs">
+              <thead>
+                <tr style={{background:C.g100}}>
+                  <th className="text-left py-2.5 px-4 font-bold uppercase tracking-wider" style={{color:C.g600,fontSize:10,width:80}}>Hora</th>
+                  <th className="text-left py-2.5 px-4 font-bold uppercase tracking-wider" style={{color:C.g600,fontSize:10,width:100}}>Tipo</th>
+                  <th className="text-left py-2.5 px-4 font-bold uppercase tracking-wider" style={{color:C.g600,fontSize:10}}>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.length===0 ? (
+                  <tr><td colSpan={3} className="text-center py-8 text-xs italic" style={{color:C.g400}}>Nenhum evento encontrado</td></tr>
+                ) : filtered.map((h,i)=>(
+                  <tr key={i} className="t-row" style={{borderTop:`1px solid ${C.g150}`,opacity:0,animation:`slide-up 0.3s ease-out ${i*30}ms forwards`}}>
+                    <td className="py-2.5 px-4 tabular-nums font-semibold whitespace-nowrap" style={{color:C.g500}}>{h.t}</td>
+                    <td className="py-2.5 px-4">
+                      <span className="inline-block px-2.5 py-0.5 rounded-md text-[9px] font-bold"
+                        style={{
+                          background:h.k==='ok'?C.g700:h.k==='trn'?C.bg1:C.g150,
+                          color:h.k==='ok'?C.w:h.k==='trn'?C.b60:C.g600,
+                        }}>
+                        {h.k==='ok'?'Concluído':h.k==='trn'?'Transporte':'Evento'}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-4" style={{color:C.g700}}>{h.m}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="text-[10px] mt-2 text-right" style={{color:C.g400}}>{filtered.length} de {MOCK.log.length} eventos</div>
         </Card>
       );
     };
 
-    const GeralTab = () => (
-      <div className="tab-reveal space-y-5">
-        <Pipeline title="Sistema" source="Sistema" data={MOCK.sis}/>
-        <Pipeline title="Operador" source="Operador" data={MOCK.ope}/>
-        <Discrepancies/>
-        <StatusCards/>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <HistLog/>
-          <Alerts/>
+    const GeralTab = ({onNote}) => {
+      return (
+        <div className="tab-reveal space-y-5">
+          <Pipeline title="Pipeline — Sistema" source="Sistema" data={MOCK.sis} onNote={onNote}/>
+          <StatusCards/>
+          <EventLog/>
         </div>
-      </div>
-    );
+      );
+    };
 
     /* ================================================================
        FEA TAB
@@ -1001,8 +1023,15 @@
     const App = () => {
       const [tab,setTab]=useState('geral');
       const [k,setK]=useState(0);
+      const [noteTarget,setNoteTarget]=useState(null);
+      const [notes,setNotes]=useState({});
+      const saveNote=(id,txt)=>setNotes(n=>({...n,[id]:txt}));
       const go = id => { setTab(id); setK(n=>n+1); };
-      const T={geral:GeralTab,fea:FEATab,fp:FPTab,vd:VDTab,lc:LCTab}[tab];
+      const tabs={
+        geral:()=><GeralTab onNote={c=>setNoteTarget(c)}/>,
+        fea:FEATab, fp:FPTab, vd:VDTab, lc:LCTab,
+      };
+      const T=tabs[tab];
       return (
         <div className="min-h-screen font-body">
           <Header/>
@@ -1010,8 +1039,9 @@
           <main className="max-w-[1440px] mx-auto px-6 py-6" key={k}><T/></main>
           <footer className="text-center py-5 text-[10px] font-medium tracking-wider"
             style={{color:C.g400,borderTop:`1px solid ${C.g200}`,background:C.w}}>
-            Sincronizador v0.2 — Protótipo — © Evcomx {new Date().getFullYear()}
+            Sincronizador v0.3 — Protótipo — © Evcomx {new Date().getFullYear()}
           </footer>
+          {noteTarget && <NoteModal corrida={noteTarget} notes={notes} onSave={saveNote} onClose={()=>setNoteTarget(null)}/>}
         </div>
       );
     };
