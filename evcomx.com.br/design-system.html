@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Design System — EvcomX</title>
+    <link href="assets/cropped-Frame-39949-32x32_aad93668342e.png" rel="icon" sizes="32x32"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { DEFAULT: '#E02F1A', dark: '#AC2A1B', deep: '#511710' },
+                        slate: { DEFAULT: '#383E44' },
+                        surface: { DEFAULT: '#f4f7f9', light: '#F6F6F6' },
+                        mid: '#7A7A7A',
+                    },
+                    fontFamily: {
+                        heading: ['"Bai Jamjuree"', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/wpr-usedcss.css"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Elementor video bg fix */
+        .elementor-background-video-container {
+            position: absolute; inset: 0; overflow: hidden; z-index: 0;
+        }
+        .elementor-background-video-hosted {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto; object-fit: cover;
+        }
+        .elementor-element-c6f346c > .e-con-inner {
+            position: relative; z-index: 1;
+        }
+
+        /* Reveal animation */
+        .reveal { opacity: 0; transform: translateY(2rem); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-500 { transition-delay: 0.5s; }
+        .delay-700 { transition-delay: 0.7s; }
+
+        /* Text mask reveal */
+        .text-reveal-wrapper { overflow: hidden; display: inline-block; vertical-align: bottom; }
+        .text-reveal-content {
+            transform: translateY(110%); opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
+            display: block;
+        }
+        .reveal-active .text-reveal-content { transform: translateY(0); opacity: 1; }
+
+        /* Hover lift */
+        .hover-lift { transition: transform .3s ease, box-shadow .3s ease; }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(224,47,26,0.2); }
+
+        /* Custom scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* fadeIn keyframe for demo */
+        @keyframes dsFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes dsSlideInUp {
+            from { transform: translateY(100%); }
+            to   { transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen bg-surface text-slate selection:bg-brand selection:text-white home wp-singular page-template-default page page-id-672 wp-embed-responsive wp-theme-hello-elementor hello-elementor-default elementor-default elementor-template-full-width elementor-kit-4 elementor-page elementor-page-672">
+
+    <!-- Main Container -->
+    <div class="max-w-[1400px] mx-auto border-x border-slate/10 relative bg-surface">
+
+        <!-- Grid Guide Lines -->
+        <div class="absolute inset-0 pointer-events-none grid grid-cols-12 gap-0 z-0 h-full w-full hidden md:grid">
+            <div class="col-span-3 border-r border-slate/5 h-full"></div>
+            <div class="col-span-6 border-r border-slate/5 h-full"></div>
+            <div class="col-span-3 h-full"></div>
+        </div>
+
+        <!-- ═══════════ NAVIGATION ═══════════ -->
+        <header class="relative z-50 border-b border-slate/10 sticky top-0 bg-surface/95 backdrop-blur-md">
+            <div class="flex justify-between items-center px-4 md:px-6 py-5">
+                <div class="flex items-center gap-6">
+                    <a class="text-xs font-medium tracking-widest uppercase hover:text-brand transition-colors font-body" href="#typography">Tipografia</a>
+                    <a class="text-xs font-medium tracking-widest uppercase hover:text-brand transition-colors font-body" href="#colors">Cores</a>
+                    <a class="text-xs font-medium tracking-widest uppercase hover:text-brand transition-colors font-body hidden md:block" href="#components">Componentes</a>
+                </div>
+                <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-3 group cursor-pointer">
+                    <img src="assets/SiteLogoEvcomX_e1c4bffc40ef.png" alt="EvcomX" class="h-5 group-hover:opacity-70 transition-opacity"/>
+                    <span class="px-2 py-0.5 border border-brand/40 rounded text-[10px] font-medium tracking-widest uppercase text-brand font-body">DS</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a class="text-xs font-medium tracking-widest uppercase hover:text-brand transition-colors font-body hidden md:block" href="#layout">Layout</a>
+                    <a class="text-xs font-medium tracking-widest uppercase hover:text-brand transition-colors font-body" href="#motion">Motion</a>
+                    <a class="text-xs font-medium tracking-widest uppercase hover:text-brand transition-colors font-body" href="index.html">Site &rarr;</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- ═══════════ 0) HERO (CLONE) ═══════════ -->
+        <section id="hero" class="relative z-10 border-b border-slate/10">
+            <div class="grid grid-cols-1 md:grid-cols-12 min-h-[600px]">
+                <!-- Hero Video -->
+                <div class="col-span-1 md:col-span-9 border-b md:border-b-0 md:border-r border-slate/10 relative overflow-hidden">
+                    <div class="elementor elementor-672" data-elementor-id="672" data-elementor-post-type="page" data-elementor-type="wp-page">
+                        <div class="elementor-element elementor-element-c6f346c e-flex e-con-boxed e-con e-parent e-lazyloaded"
+                             data-e-type="container" data-element_type="container" data-id="c6f346c"
+                             data-settings='{"background_background":"video","background_play_on_mobile":"yes"}'
+                             style="min-height:600px;">
+                            <div class="e-con-inner">
+                                <div class="elementor-background-video-container">
+                                    <video autoplay class="elementor-background-video-hosted" loop muted playsinline role="presentation"
+                                           src="https://s.criacaostatic.cc/evcomxo0wd8sb/uploads/2024/10/Imagem-site-colete-laranja-1.mp4"></video>
+                                </div>
+                                <div class="elementor-element elementor-element-9922910 elementor-widget__width-initial elementor-widget elementor-widget-heading"
+                                     data-e-type="widget" data-element_type="widget" data-id="9922910" data-widget_type="heading.default">
+                                    <div class="elementor-widget-container">
+                                        <h1 class="elementor-heading-title elementor-size-default">DESIGN SYSTEM evcomx</h1>
+                                    </div>
+                                </div>
+                                <div class="elementor-element elementor-element-0284bce elementor-widget__width-initial elementor-widget elementor-widget-text-editor"
+                                     data-e-type="widget" data-element_type="widget" data-id="0284bce" data-widget_type="text-editor.default">
+                                    <div class="elementor-widget-container">
+                                        <p>Visual language, componentes e tokens que definem a identidade digital da EvcomX</p>
+                                    </div>
+                                </div>
+                                <div class="elementor-element elementor-element-82fcac2 elementor-align-left elementor-widget elementor-widget-button"
+                                     data-e-type="widget" data-element_type="widget" data-id="82fcac2" data-widget_type="button.default">
+                                    <div class="elementor-widget-container">
+                                        <div class="elementor-button-wrapper">
+                                            <a class="elementor-button elementor-button-link elementor-size-sm" href="#typography">
+                                                <span class="elementor-button-content-wrapper">
+                                                    <span class="elementor-button-icon">
+                                                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                                                    </span>
+                                                    <span class="elementor-button-text">Explorar sistema</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Stats Column -->
+                <div class="col-span-1 md:col-span-3 grid grid-rows-2 h-full min-h-[400px]">
+                    <div class="row-span-1 border-b border-slate/10 p-8 flex flex-col justify-between reveal delay-500 group hover:bg-white transition-colors">
+                        <span class="text-3xl text-mid group-hover:text-brand transition-colors font-heading font-medium">&#9632;</span>
+                        <div>
+                            <h2 class="text-5xl font-heading font-medium tracking-tighter text-slate">06</h2>
+                            <span class="text-xs font-body font-medium text-mid mt-1 block tracking-widest uppercase">Seções</span>
+                        </div>
+                    </div>
+                    <div class="row-span-1 p-8 flex flex-col justify-between reveal delay-700 group hover:bg-white transition-colors">
+                        <span class="text-3xl text-mid group-hover:text-brand transition-colors font-heading font-medium">&#9650;</span>
+                        <div>
+                            <h2 class="text-5xl font-heading font-medium tracking-tighter text-slate">08</h2>
+                            <span class="text-xs font-body font-medium text-mid mt-1 block tracking-widest uppercase">Color Tokens</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 1) TYPOGRAPHY ═══════════ -->
+        <section id="typography" class="relative z-10 border-b border-slate/10">
+            <div class="p-8 md:p-12 border-b border-slate/10 bg-white/50">
+                <span class="text-xs font-body font-medium uppercase text-mid block mb-2 tracking-widest">01 / Foundations</span>
+                <h2 class="text-4xl font-heading font-semibold tracking-tight text-slate uppercase">Tipografia</h2>
+            </div>
+
+            <div class="grid grid-cols-1">
+                <!-- H1 — Hero (dark bg) -->
+                <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate/10 p-8 md:p-12 items-baseline bg-[#383E44]">
+                    <div class="col-span-3 text-xs font-body font-semibold text-white/40 uppercase tracking-widest mb-4 md:mb-0">Heading H1</div>
+                    <div class="col-span-7">
+                        <h1 class="font-heading text-[56px] leading-[65px] font-semibold uppercase tracking-[1px] text-white">VIVEMOS grandes indústrias</h1>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-white/35">
+                        Bai Jamjuree<br/>56px / 65px · 600
+                    </div>
+                </div>
+
+                <!-- H2 — Section -->
+                <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate/10 p-8 md:p-12 items-baseline">
+                    <div class="col-span-3 text-xs font-body font-semibold text-mid uppercase tracking-widest mb-4 md:mb-0">Heading H2</div>
+                    <div class="col-span-7">
+                        <h2 class="font-heading text-[40px] leading-[48px] font-semibold uppercase tracking-[1px] text-slate">vivemos <span class="text-brand">matemática industrial</span></h2>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-mid">
+                        Bai Jamjuree<br/>40px / 48px · 600
+                    </div>
+                </div>
+
+                <!-- H3 — Card label -->
+                <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate/10 p-8 md:p-12 items-baseline">
+                    <div class="col-span-3 text-xs font-body font-semibold text-mid uppercase tracking-widest mb-4 md:mb-0">Heading H3</div>
+                    <div class="col-span-7">
+                        <h3 class="font-body text-[20px] leading-[35px] font-normal tracking-[0.15px] text-slate">Otimização</h3>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-mid">
+                        Inter<br/>20px / 35px · 400
+                    </div>
+                </div>
+
+                <!-- Display Number (Stats) -->
+                <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate/10 p-8 md:p-12 items-baseline">
+                    <div class="col-span-3 text-xs font-body font-semibold text-mid uppercase tracking-widest mb-4 md:mb-0">Display Number</div>
+                    <div class="col-span-7">
+                        <span class="font-heading text-[64px] leading-[75px] font-medium tracking-[-1.5px] text-slate">+82%</span>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-mid">
+                        Bai Jamjuree<br/>64px / 75px · 500
+                    </div>
+                </div>
+
+                <!-- Body Large -->
+                <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate/10 p-8 md:p-12 items-baseline">
+                    <div class="col-span-3 text-xs font-body font-semibold text-mid uppercase tracking-widest mb-4 md:mb-0">Body Large</div>
+                    <div class="col-span-7">
+                        <p class="font-body text-[18px] leading-[1.4em] font-normal text-mid">Para resolver problemas complexos com soluções de software que utilizam matemática industrial de ponta</p>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-mid">
+                        Inter<br/>18px / 1.4em · 400
+                    </div>
+                </div>
+
+                <!-- Button Label -->
+                <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate/10 p-8 md:p-12 items-baseline">
+                    <div class="col-span-3 text-xs font-body font-semibold text-mid uppercase tracking-widest mb-4 md:mb-0">Button Label</div>
+                    <div class="col-span-7">
+                        <span class="font-body text-[15px] leading-[24px] font-medium tracking-[0.46px] text-brand">Nossas especialidades</span>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-mid">
+                        Inter<br/>15px / 24px · 500
+                    </div>
+                </div>
+
+                <!-- Accent / UI -->
+                <div class="grid grid-cols-1 md:grid-cols-12 p-8 md:p-12 items-baseline">
+                    <div class="col-span-3 text-xs font-body font-semibold text-mid uppercase tracking-widest mb-4 md:mb-0">Label / UI</div>
+                    <div class="col-span-7">
+                        <span class="font-body text-[14px] leading-[24px] font-medium tracking-[0.4px] text-slate">Solicitar uma apresentação</span>
+                    </div>
+                    <div class="col-span-2 text-right text-xs font-body text-mid">
+                        Inter<br/>14px / 24px · 500
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 2) COLORS &amp; SURFACES ═══════════ -->
+        <section id="colors" class="relative z-10 border-b border-slate/10">
+            <div class="p-8 md:p-12 border-b border-slate/10 bg-white/50">
+                <span class="text-xs font-body font-medium uppercase text-mid block mb-2 tracking-widest">02 / Foundations</span>
+                <h2 class="text-4xl font-heading font-semibold tracking-tight text-slate uppercase">Cores &amp; Superfícies</h2>
+            </div>
+
+            <!-- Brand colors -->
+            <div class="p-8 md:p-12 border-b border-slate/10">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-6 font-body">Brand</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-brand"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Brand Red</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#E02F1A</div>
+                            <div class="text-[10px] text-brand font-body mt-1">--e-global-color-primary</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-brand-dark"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Red Dark</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#AC2A1B</div>
+                            <div class="text-[10px] text-brand font-body mt-1">Hover / Pressed</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-brand-deep"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Red Deep</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#511710</div>
+                            <div class="text-[10px] text-mid font-body mt-1">Hero overlay bg</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Neutrals -->
+            <div class="p-8 md:p-12 border-b border-slate/10">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-6 font-body">Neutros</h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-[#383E44]"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Slate Dark</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#383E44</div>
+                            <div class="text-[10px] text-brand font-body mt-1">--e-global-color-secondary</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-[#7A7A7A]"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Gray Mid</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#7A7A7A</div>
+                            <div class="text-[10px] text-brand font-body mt-1">--e-global-color-text</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-white border border-slate/10"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">White</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#FFFFFF</div>
+                            <div class="text-[10px] text-brand font-body mt-1">--e-global-color-ec89267</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-[#F6F6F6] border border-slate/10"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Surface Light</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#F6F6F6</div>
+                            <div class="text-[10px] text-brand font-body mt-1">--e-global-color-eb843ae</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-24 bg-[#f4f7f9] border border-slate/10"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Section Bg</div>
+                            <div class="text-[11px] text-mid font-body tracking-wider">#f4f7f9</div>
+                            <div class="text-[10px] text-mid font-body mt-1">Content sections</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overlays -->
+            <div class="p-8 md:p-12">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-6 font-body">Gradientes &amp; Overlays</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-20" style="background:linear-gradient(180deg,#51171040 0%,#511710 100%);"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Hero Overlay</div>
+                            <div class="text-[11px] text-mid font-body">#51171040 &rarr; #511710</div>
+                            <div class="text-[10px] text-mid font-body">mix-blend-mode: multiply</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-20 bg-black/80"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Modal Overlay</div>
+                            <div class="text-[11px] text-mid font-body">rgba(0,0,0,0.8)</div>
+                            <div class="text-[10px] text-mid font-body">Cookie / popup backdrop</div>
+                        </div>
+                    </div>
+                    <div class="rounded overflow-hidden shadow-sm">
+                        <div class="h-20 border border-slate/10" style="background:linear-gradient(180deg,transparent 0%,transparent 100%);"></div>
+                        <div class="bg-white p-3">
+                            <div class="text-xs font-semibold text-slate font-body">Button Bg</div>
+                            <div class="text-[11px] text-mid font-body">Transparent gradient</div>
+                            <div class="text-[10px] text-mid font-body">Default button background</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 3) UI COMPONENTS ═══════════ -->
+        <section id="components" class="relative z-10 border-b border-slate/10">
+            <div class="p-8 md:p-12 border-b border-slate/10 bg-white/50">
+                <span class="text-xs font-body font-medium uppercase text-mid block mb-2 tracking-widest">03 / UI Elements</span>
+                <h2 class="text-4xl font-heading font-semibold tracking-tight text-slate uppercase">Componentes</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Buttons -->
+                <div class="p-8 md:p-12 border-b md:border-b-0 md:border-r border-slate/10">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-8 font-body">Botões</h3>
+                    <div class="space-y-8">
+                        <!-- Ghost / Default Button -->
+                        <div class="flex items-center gap-4">
+                            <div class="elementor elementor-672">
+                                <div class="elementor-element elementor-element-82fcac2 elementor-align-left elementor-widget elementor-widget-button">
+                                    <div class="elementor-widget-container">
+                                        <div class="elementor-button-wrapper">
+                                            <a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+                                                <span class="elementor-button-content-wrapper">
+                                                    <span class="elementor-button-icon">
+                                                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                                                    </span>
+                                                    <span class="elementor-button-text">Saiba mais</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-xs font-body text-mid">Default</span>
+                        </div>
+
+                        <!-- Filled / Submit -->
+                        <div class="flex items-center gap-4">
+                            <button class="px-6 py-3 bg-brand text-white rounded text-sm font-medium font-body hover:bg-brand-dark transition-colors cursor-pointer border-none">
+                                Solicitar apresentação
+                            </button>
+                            <span class="text-xs font-body text-mid">Filled</span>
+                        </div>
+
+                        <!-- Filled Hover -->
+                        <div class="flex items-center gap-4">
+                            <button class="px-6 py-3 bg-brand-dark text-white rounded text-sm font-medium font-body cursor-default border-none">
+                                Solicitar apresentação
+                            </button>
+                            <span class="text-xs font-body text-mid">Filled Hover</span>
+                        </div>
+
+                        <!-- Cookie CTA -->
+                        <div class="flex items-center gap-4 bg-[#383E44] p-4 rounded max-w-max">
+                            <button class="px-5 py-2 bg-brand text-white rounded text-sm font-medium font-body cursor-default border-none">
+                                Entendi
+                            </button>
+                            <span class="text-xs font-body text-white/50">Cookie CTA</span>
+                        </div>
+
+                        <!-- Disabled -->
+                        <div class="flex items-center gap-4">
+                            <div class="elementor elementor-672 opacity-40 pointer-events-none">
+                                <div class="elementor-element elementor-element-82fcac2 elementor-align-left elementor-widget elementor-widget-button">
+                                    <div class="elementor-widget-container">
+                                        <div class="elementor-button-wrapper">
+                                            <a class="elementor-button elementor-button-link elementor-size-sm" href="#" tabindex="-1" aria-disabled="true">
+                                                <span class="elementor-button-content-wrapper">
+                                                    <span class="elementor-button-icon">
+                                                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                                                    </span>
+                                                    <span class="elementor-button-text">Saiba mais</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-xs font-body text-mid">Disabled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs & Form -->
+                <div class="p-8 md:p-12">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-8 font-body">Tabs</h3>
+                    <div class="flex flex-wrap gap-2 mb-10">
+                        <button onclick="dsTab(this)" class="ds-tab px-5 py-2.5 text-sm font-medium font-body rounded transition-colors bg-brand text-white border-none cursor-pointer">Gerdau</button>
+                        <button onclick="dsTab(this)" class="ds-tab px-5 py-2.5 text-sm font-medium font-body rounded transition-colors bg-transparent text-slate border border-slate/20 cursor-pointer hover:bg-slate/5">Petrobras</button>
+                        <button onclick="dsTab(this)" class="ds-tab px-5 py-2.5 text-sm font-medium font-body rounded transition-colors bg-transparent text-slate border border-slate/20 cursor-pointer hover:bg-slate/5">Porto Sudeste</button>
+                        <button onclick="dsTab(this)" class="ds-tab px-5 py-2.5 text-sm font-medium font-body rounded transition-colors bg-transparent text-slate border border-slate/20 cursor-pointer hover:bg-slate/5">Anglo American</button>
+                    </div>
+
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-8 font-body">Formulário</h3>
+                    <div class="bg-white rounded p-6 space-y-4 max-w-md">
+                        <div>
+                            <label class="text-xs text-mid font-body block mb-1.5">Nome</label>
+                            <input type="text" placeholder="Nome" class="w-full px-4 py-2.5 rounded border border-slate/20 text-sm font-body text-slate focus:outline-2 focus:outline-brand focus:outline-offset-[-1px] bg-white"/>
+                        </div>
+                        <div>
+                            <label class="text-xs text-mid font-body block mb-1.5">Solução de maior interesse</label>
+                            <select class="w-full px-4 py-2.5 rounded border border-slate/20 text-sm font-body text-slate bg-white">
+                                <option>Personalização da produção</option>
+                                <option>Otimização de aditivos</option>
+                                <option>Otimização de misturas</option>
+                                <option>Controle e otimização de processos</option>
+                                <option>Manutenção de ativos</option>
+                                <option>EvcomX Lab</option>
+                            </select>
+                        </div>
+                        <button class="px-6 py-2.5 bg-brand text-white rounded text-sm font-medium font-body hover:bg-brand-dark transition-colors cursor-pointer border-none">
+                            Solicitar uma apresentação
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="border-t border-slate/10">
+                <div class="p-8 md:p-12">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-8 font-body">Feature Card</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl">
+                        <div class="bg-white rounded p-6 hover-lift cursor-pointer border border-slate/5">
+                            <h4 class="font-body text-[20px] leading-[35px] font-normal text-slate mb-2">Otimização</h4>
+                            <span class="font-heading text-[40px] leading-[48px] font-medium tracking-[-1px] text-slate block mb-2">1m ton</span>
+                            <p class="text-sm text-mid font-body">Cuidamos de 1 milhão de toneladas de minério de ferro</p>
+                        </div>
+                        <div class="bg-white rounded p-6 hover-lift cursor-pointer border border-slate/5">
+                            <h4 class="font-body text-[20px] leading-[35px] font-normal text-slate mb-2">Flexibilização</h4>
+                            <span class="font-heading text-[40px] leading-[48px] font-medium tracking-[-1px] text-brand block mb-2">+82%</span>
+                            <p class="text-sm text-mid font-body">De redução média de dispersão de material</p>
+                        </div>
+                        <div class="bg-white rounded p-6 hover-lift cursor-pointer border border-slate/5">
+                            <h4 class="font-body text-[20px] leading-[35px] font-normal text-slate mb-2">Sustentabilidade</h4>
+                            <span class="font-heading text-[40px] leading-[48px] font-medium tracking-[-1px] text-slate block mb-2">500+</span>
+                            <p class="text-sm text-mid font-body">Distribuidores economizados</p>
+                        </div>
+                        <div class="bg-white rounded p-6 hover-lift cursor-pointer border border-slate/5">
+                            <h4 class="font-body text-[20px] leading-[35px] font-normal text-slate mb-2">Manutenção</h4>
+                            <span class="font-heading text-[40px] leading-[48px] font-medium tracking-[-1px] text-slate block mb-2">+300k</span>
+                            <p class="text-sm text-mid font-body">Manutenções supervisionadas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logo Row -->
+            <div class="border-t border-slate/10">
+                <div class="p-8 md:p-12">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-8 font-body">Logo Bar (Parceiros)</h3>
+                    <div class="flex items-center gap-10 flex-wrap justify-center py-4">
+                        <img src="assets/siteEvcomXMarcaPetrobras_0f98015c1d5f.png" alt="Petrobras" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                        <img src="assets/siteEvcomXMarcaGerdau_410bb6069c9e.png" alt="Gerdau" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                        <img src="assets/siteEvcomXMarcaBraskem_c23db290dc20.png" alt="Braskem" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                        <img src="assets/siteEvcomXMarcaUsiminas-1_8c99c863f876.png" alt="Usiminas" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                        <img src="assets/siteEvcomXMarcaAngloamerican_6845f581bdf8.png" alt="Anglo American" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                        <img src="assets/siteEvcomXMarcaArcelormital_74972985012e.png" alt="ArcelorMittal" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                        <img src="assets/siteEvcomXMarcaCSN_1b47b53ef1e7.png" alt="CSN" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 4) LAYOUT &amp; SPACING ═══════════ -->
+        <section id="layout" class="relative z-10 border-b border-slate/10">
+            <div class="p-8 md:p-12 border-b border-slate/10 bg-white/50">
+                <span class="text-xs font-body font-medium uppercase text-mid block mb-2 tracking-widest">04 / Foundations</span>
+                <h2 class="text-4xl font-heading font-semibold tracking-tight text-slate uppercase">Layout &amp; Grid</h2>
+            </div>
+
+            <!-- Spacing Scale -->
+            <div class="p-8 md:p-12 border-b border-slate/10">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-8 font-body">Escala de Espaçamento</h3>
+                <div class="flex items-end gap-6 flex-wrap">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:8px"></div>
+                        <span class="text-[10px] text-mid font-body">8</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:16px"></div>
+                        <span class="text-[10px] text-mid font-body">16</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:24px"></div>
+                        <span class="text-[10px] text-mid font-body">24</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:32px"></div>
+                        <span class="text-[10px] text-mid font-body">32</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:40px"></div>
+                        <span class="text-[10px] text-mid font-body">40</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:60px"></div>
+                        <span class="text-[10px] text-mid font-body">60</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 bg-brand/15 border-2 border-brand rounded" style="height:80px"></div>
+                        <span class="text-[10px] text-mid font-body">80</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-14 bg-brand/15 border-2 border-brand rounded" style="height:100px"></div>
+                        <span class="text-[10px] text-mid font-body text-center">200<br/>hero</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Demo -->
+            <div class="p-8 md:p-12 border-b border-slate/10">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-4 font-body">Container max-width: 1140px</h3>
+                <p class="text-xs font-body text-mid mb-6">12-column grid · gap 24px · flex containers</p>
+                <div class="grid grid-cols-12 gap-1 h-[120px]">
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                    <div class="col-span-1 bg-slate/10 rounded"></div>
+                </div>
+            </div>
+
+            <!-- Layout Patterns -->
+            <div class="p-8 md:p-12">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate mb-6 font-body">Padrões de Layout</h3>
+                <div class="space-y-6">
+                    <div class="border border-slate/10 rounded overflow-hidden">
+                        <div class="bg-[#383E44] p-10 text-center">
+                            <span class="text-xs font-body text-white/40 tracking-widest uppercase">Hero — Video bg + Flex column + v-pad 200px + max-width 542px</span>
+                        </div>
+                    </div>
+                    <div class="border border-slate/10 rounded overflow-hidden">
+                        <div class="grid grid-cols-4 gap-4 p-6 bg-white">
+                            <div class="bg-surface rounded p-4 text-center text-xs text-mid font-body">Card 1</div>
+                            <div class="bg-surface rounded p-4 text-center text-xs text-mid font-body">Card 2</div>
+                            <div class="bg-surface rounded p-4 text-center text-xs text-mid font-body">Card 3</div>
+                            <div class="bg-surface rounded p-4 text-center text-xs text-mid font-body">Card 4</div>
+                        </div>
+                        <div class="bg-slate/5 px-4 py-2 text-[11px] text-mid font-body">
+                            Feature Grid — flex-row · wrap · gap 24px · child flex:1 min-width:200px
+                        </div>
+                    </div>
+                    <div class="border border-slate/10 rounded overflow-hidden">
+                        <div class="flex items-center justify-center gap-10 p-8 bg-white">
+                            <div class="w-20 h-8 bg-slate/10 rounded"></div>
+                            <div class="w-20 h-8 bg-slate/10 rounded"></div>
+                            <div class="w-20 h-8 bg-slate/10 rounded"></div>
+                            <div class="w-20 h-8 bg-slate/10 rounded"></div>
+                            <div class="w-20 h-8 bg-slate/10 rounded"></div>
+                        </div>
+                        <div class="bg-slate/5 px-4 py-2 text-[11px] text-mid font-body">
+                            Logos Row — flex · center · gap 40px · v-pad 60px
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 5) MOTION &amp; INTERACTION ═══════════ -->
+        <section id="motion" class="relative z-10 border-b border-slate/10">
+            <div class="p-8 md:p-12 border-b border-slate/10 bg-white/50">
+                <span class="text-xs font-body font-medium uppercase text-mid block mb-2 tracking-widest">05 / Interaction</span>
+                <h2 class="text-4xl font-heading font-semibold tracking-tight text-slate uppercase">Motion &amp; Animação</h2>
+            </div>
+
+            <!-- Reveal Examples -->
+            <div class="p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-slate/10">
+                <div class="p-6 border border-slate/10 rounded bg-white reveal">
+                    <span class="text-xs font-body text-mid block mb-2">fadeIn Entrance</span>
+                    <h4 class="text-xl font-heading font-medium text-slate">Scroll Reveal</h4>
+                    <p class="text-xs text-mid font-body mt-2">Classe <code class="bg-slate/5 px-1 rounded">elementor-invisible</code> + fadeIn ao entrar no viewport</p>
+                </div>
+                <div class="p-6 border border-slate/10 rounded bg-white reveal delay-200">
+                    <span class="text-xs font-body text-mid block mb-2">Staggered</span>
+                    <h4 class="text-xl font-heading font-medium text-slate">Delay 200ms</h4>
+                    <p class="text-xs text-mid font-body mt-2">Mesma animação com atraso escalonado</p>
+                </div>
+                <div class="p-6 border border-slate/10 rounded bg-white reveal delay-500">
+                    <span class="text-xs font-body text-mid block mb-2">Long Delay</span>
+                    <h4 class="text-xl font-heading font-medium text-slate">Delay 500ms</h4>
+                    <p class="text-xs text-mid font-body mt-2">Atraso mais longo para elementos terciários</p>
+                </div>
+            </div>
+
+            <!-- Motion Cards -->
+            <div class="p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-slate/10">
+                <!-- Button Hover -->
+                <div class="p-6 border border-slate/10 rounded bg-white">
+                    <span class="text-xs font-body text-mid block mb-4 uppercase tracking-widest font-semibold">Button Hover</span>
+                    <p class="text-xs text-mid font-body mb-4">Ghost: transparent &rarr; #e02F1A0A<br/>Filled: #E02F1A &rarr; #AC2A1B</p>
+                    <div class="flex flex-col gap-3">
+                        <button class="px-5 py-2 bg-brand text-white rounded text-sm font-medium font-body hover:bg-brand-dark transition-colors cursor-pointer border-none">
+                            Hover me
+                        </button>
+                        <button class="px-5 py-2 bg-transparent text-brand rounded text-sm font-medium font-body border border-brand/30 hover:bg-brand/5 transition-colors cursor-pointer">
+                            Ghost hover
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hover Lift -->
+                <div class="p-6 border border-slate/10 rounded bg-white">
+                    <span class="text-xs font-body text-mid block mb-4 uppercase tracking-widest font-semibold">Hover Lift</span>
+                    <p class="text-xs text-mid font-body mb-4">Cards usam transition .3s + translateY(-4px) + red box-shadow</p>
+                    <div class="bg-surface rounded p-4 hover-lift cursor-pointer">
+                        <span class="text-sm text-slate font-body">Passe o mouse</span>
+                    </div>
+                </div>
+
+                <!-- Popup slideInUp -->
+                <div class="p-6 border border-slate/10 rounded bg-white">
+                    <span class="text-xs font-body text-mid block mb-4 uppercase tracking-widest font-semibold">Popup slideInUp</span>
+                    <p class="text-xs text-mid font-body mb-4">Cookie popup: slideInUp 0.4s + box-shadow</p>
+                    <button onclick="triggerPopup()" class="text-xs text-brand font-body font-medium border border-brand rounded px-3 py-1.5 cursor-pointer bg-transparent hover:bg-brand/5 transition-colors mb-3">
+                        Replay ↺
+                    </button>
+                    <div class="overflow-hidden rounded" id="popup-wrap">
+                        <div id="popup-inner" class="bg-[#383E44] rounded p-4 shadow-lg" style="transform:translateY(100%);transition:transform .4s ease;">
+                            <p class="text-white text-sm font-body mb-3">Utilizamos cookies para melhorar a sua experiência.</p>
+                            <button class="px-4 py-1.5 bg-brand text-white rounded text-xs font-medium font-body cursor-default border-none">Entendi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Transition -->
+            <div class="p-8 md:p-12">
+                <span class="text-xs font-body text-mid block mb-4 uppercase tracking-widest font-semibold">Image Transition (.3s)</span>
+                <div class="flex items-center gap-6">
+                    <div class="w-24 h-16 overflow-hidden rounded border border-slate/10">
+                        <img src="assets/siteEvcomXMarcaGerdau_410bb6069c9e.png" alt="Gerdau"
+                             class="w-full h-full object-contain grayscale transition-all duration-300 hover:grayscale-0 hover:scale-110"/>
+                    </div>
+                    <div class="w-24 h-16 overflow-hidden rounded border border-slate/10">
+                        <img src="assets/siteEvcomXMarcaPetrobras_0f98015c1d5f.png" alt="Petrobras"
+                             class="w-full h-full object-contain grayscale transition-all duration-300 hover:grayscale-0 hover:scale-110"/>
+                    </div>
+                    <span class="text-xs text-mid font-body">Hover nas imagens &uarr;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ FOOTER ═══════════ -->
+        <footer class="relative z-10 bg-[#0d0d0d] text-white/30 py-8 px-8 flex justify-between items-center flex-wrap gap-4">
+            <img src="assets/SiteLogoEvcomX_e1c4bffc40ef.png" alt="EvcomX" class="h-5 opacity-50"/>
+            <span class="text-xs font-body tracking-widest uppercase">Design System &middot; v1.0</span>
+            <a href="index.html" class="text-xs font-body text-white/40 hover:text-white transition-colors no-underline">&larr; Voltar ao site</a>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll reveal observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        if (entry.target.querySelector('.text-reveal-content') ||
+                            entry.target.classList.contains('text-reveal-wrapper')) {
+                            entry.target.classList.add('reveal-active');
+                        }
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // Hero animations
+            setTimeout(() => {
+                const hero = document.getElementById('hero');
+                if (hero) {
+                    hero.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+                }
+            }, 300);
+
+            // Popup demo auto-trigger
+            setTimeout(triggerPopup, 800);
+        });
+
+        // Tab toggle
+        function dsTab(btn) {
+            btn.parentElement.querySelectorAll('.ds-tab').forEach(t => {
+                t.classList.remove('bg-brand', 'text-white');
+                t.classList.add('bg-transparent', 'text-slate', 'border', 'border-slate/20');
+            });
+            btn.classList.remove('bg-transparent', 'text-slate', 'border', 'border-slate/20');
+            btn.classList.add('bg-brand', 'text-white');
+        }
+
+        // Popup demo
+        function triggerPopup() {
+            const inner = document.getElementById('popup-inner');
+            if (!inner) return;
+            inner.style.transition = 'none';
+            inner.style.transform = 'translateY(100%)';
+            inner.offsetHeight;
+            inner.style.transition = 'transform .4s ease';
+            inner.style.transform = 'translateY(0)';
+        }
+    </script>
+</body>
+</html>

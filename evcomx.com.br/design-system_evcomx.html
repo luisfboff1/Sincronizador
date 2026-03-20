@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Design System — EvcomX</title>
+  <link href="assets/cropped-Frame-39949-32x32_aad93668342e.png" rel="icon" sizes="32x32"/>
+
+  <!-- Preload local fonts (same as original site) -->
+  <link as="font" crossorigin="" href="assets/poppins-pxieyp8kv8jhgfvrjjfecg_7e6a1b946eb8.woff2" rel="preload"/>
+  <link as="font" crossorigin="" href="assets/inter-ucc53fwrk3iltcvneqg7ca725jhhknnqk6l5uum.woff2" rel="preload"/>
+  <link as="font" crossorigin="" href="assets/baijamjuree-ldiqapscobt_aeqq7ftydoa0reheljo0.woff2" rel="preload"/>
+
+  <!-- All original page CSS (extracted from wpr-usedcss inline block) -->
+  <link rel="stylesheet" href="assets/wpr-usedcss.css"/>
+
+  <style>
+    /* ─── LOCAL FONT-FACE DECLARATIONS ─────────────────────────────────── */
+    @font-face {
+      font-family: 'Bai Jamjuree';
+      src: url('assets/baijamjuree-ldiqapscobt_aeqq7f_1ea16d8120c3.woff2') format('woff2');
+      font-weight: 400 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('assets/inter-ucc53fwrk3iltcvneqg7ca72_0c75fd076849.woff2') format('woff2');
+      font-weight: 100 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('assets/poppins-pxieyp8kv8jhgfvrjjfecg_7e6a1b946eb8.woff2') format('woff2');
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    /* ─── ELEMENTOR VIDEO BG FIX (static, no JS needed) ────────────────── */
+    .elementor-background-video-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .elementor-background-video-hosted {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: cover;
+    }
+    .elementor-element-c6f346c > .e-con-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── DS NAV ─────────────────────────────────────────────────────────── */
+    .ds-nav {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      background: #0d0d0d;
+      border-bottom: 1px solid rgba(224,47,26,0.3);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 40px;
+      height: 52px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .ds-nav::-webkit-scrollbar { display: none; }
+    .ds-nav__logo {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-right: 32px;
+    }
+    .ds-nav__logo img { height: 22px; width: auto; }
+    .ds-nav__badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #E02F1A;
+      padding: 2px 8px;
+      border: 1px solid rgba(224,47,26,0.4);
+      border-radius: 3px;
+      margin-left: 10px;
+      flex-shrink: 0;
+    }
+    .ds-nav__links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .ds-nav__links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      padding: 0 16px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .ds-nav__links a:hover {
+      color: #fff;
+      border-bottom-color: #E02F1A;
+    }
+
+    /* ─── DS SECTION WRAPPER ─────────────────────────────────────────────── */
+    .ds-section {
+      background: #f4f7f9;
+      padding: 80px 0;
+    }
+    .ds-section--dark {
+      background: #111317;
+    }
+    .ds-section__inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    .ds-section__header {
+      margin-bottom: 56px;
+    }
+    .ds-section__label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #E02F1A;
+      margin-bottom: 12px;
+    }
+    .ds-section__title {
+      font-family: 'Bai Jamjuree', sans-serif;
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 48px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #383E44;
+      margin: 0;
+    }
+    .ds-section--dark .ds-section__title { color: #fff; }
+    .ds-section__desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: #7A7A7A;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    .ds-section--dark .ds-section__desc { color: rgba(255,255,255,0.5); }
+
+    /* ─── SPEC TABLE ─────────────────────────────────────────────────────── */
+    .ds-type-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .ds-type-table tr {
+      border-bottom: 1px solid rgba(56,62,68,0.1);
+    }
+    .ds-type-table tr:last-child { border-bottom: none; }
+    .ds-type-table td {
+      padding: 24px 16px;
+      vertical-align: middle;
+    }
+    .ds-type-table .td-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #7A7A7A;
+      width: 140px;
+      min-width: 140px;Extract HTML Design System v2
+You are a Design System Showcase Builder.
+You are given a reference website HTML:
+$ARGUMENTS
+Your task is to create one new intermediate HTML file that acts as a living design
+system + pattern library for this exact design.
+GOAL
+Generate one single file called: 
+design-system.html and place it in the same folder of
+the html file.
+This file must preserve the exact look & behavior of the reference design by
+reusing the original HTML, CSS classes, animations, keyframes, transitions,
+effects, and layout patterns — not approximations.
+HARD RULES (NON-NEGOTIABLE)
+Do not redesign or invent new styles.
+Reuse exact class names, animations, timing, easing, hover/focus states.
+Reference the same CSS/JS assets used by the original.
+If a style/component is not used in the reference HTML, do not add it.
+The file must be self-explanatory by structure (sections = documentation).
+Include a top horizontal nav with anchor links to each section.
+OBJECTIVE
+Build a single page composed of canonical examples of the design system,
+organized in sections.
+0) Hero (Exact Clone, Text Adapted)
+The first section MUST be a direct clone of the original Hero:
+Same HTML structure
+Same class names
+Same layout
+Same images and components
+Same animations and interactions
+Same buttons and background
+Same UI components (if any)
+Allowed change (only this):
+Replace the hero text content to present the Design System
+Keep similar text length and hierarchy
+Forbidden:
+Do not change layout, spacing, alignment, or animations
+Do not add or remove elements
+1) Typography
+Create a Typography section rendered as a spec table / vertical list.
+Each row MUST contain:
+Style name (e.g. “Heading 1”, “Bold M”)
+Live text preview using the exact original HTML element and CSS classes
+Font size / line-height label aligned right (format: 
+40px / 48px)
+Include ONLY styles that exist in the reference HTML, in this order:
+Heading 1
+Heading 2
+Heading 3
+Heading 4
+Bold L / Bold M / Bold S
+Paragraph (larger body, if exists)
+Regular L / Regular M / Regular S
+Rules:
+No inline styles
+No normalization
+Typography, colors, spacing, and gradients MUST come from original CSS
+If a style uses gradient text, show it exactly the same
+If a style does not exist, do NOT include it
+This section must communicate hierarchy, scale, and rhythm at a glance.
+2) Colors & Surfaces
+Backgrounds (page, section, card, glass/blur if exists)
+Borders, dividers, overlays
+Gradients (as swatches + usage context)
+3) UI Components
+Buttons, inputs, cards, etc. (only those that exist)
+Show states side-by-side: default / hover / active / focus / disabled
+Inputs only if present (default/focus/error if applicable)
+4) Layout & Spacing
+Containers, grids, columns, section paddings
+Show 2–3 real layout patterns from the reference (hero layout, grid, split)
+5) Motion & Interaction
+Show all motion behaviors present:
+Entrance animations (if any)
+Hover lifts/glows
+Button hover transitions
+Scroll/reveal behavior (only if present)
+Include a small Motion Gallery demonstrating each animation class.
+6) Icons
+If the reference uses icons:
+Display the same icon style/system
+Show size variants and color inheritance
+Use the same markup and classes
+If icons are not present, omit this section entirely
+    }
+    .ds-type-table .td-preview {
+      flex: 1;
+    }
+    .ds-type-table .td-spec {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: #7A7A7A;
+      text-align: right;
+      white-space: nowrap;
+      min-width: 160px;
+      letter-spacing: .5px;
+    }
+    .ds-type-table tr.tr--dark {
+      background: #111317;
+    }
+    .ds-type-table tr.tr--dark .td-name { color: rgba(255,255,255,0.4); }
+    .ds-type-table tr.tr--dark .td-spec { color: rgba(255,255,255,0.35); }
+
+    /* ─── COLOR SWATCHES ─────────────────────────────────────────────────── */
+    .ds-color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .ds-swatch {
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .ds-swatch__color {
+      height: 96px;
+    }
+    .ds-swatch__info {
+      background: #fff;
+      padding: 12px 14px;
+    }
+    .ds-swatch__name {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #383E44;
+      margin-bottom: 2px;
+    }
+    .ds-swatch__hex {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: #7A7A7A;
+      letter-spacing: 1px;
+    }
+    .ds-swatch__var {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: #E02F1A;
+      margin-top: 4px;
+      letter-spacing: .3px;
+    }
+
+    /* ─── COMPONENT SHOWCASE ──────────────────────────────────────────────── */
+    .ds-component-block {
+      margin-bottom: 56px;
+    }
+    .ds-component-block__label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #7A7A7A;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56,62,68,0.15);
+    }
+    .ds-states-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+    }
+    .ds-state-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .ds-state-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #7A7A7A;
+    }
+    .ds-state-item--dark { background: #111317; padding: 20px; border-radius: 4px; }
+    .ds-state-item--dark .ds-state-label { color: rgba(255,255,255,0.4); }
+
+    /* ─── LAYOUT PATTERNS ────────────────────────────────────────────────── */
+    .ds-layout-pattern {
+      margin-bottom: 48px;
+    }
+    .ds-layout-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E02F1A;
+      margin-bottom: 16px;
+    }
+    .ds-layout-frame {
+      border: 1.5px dashed rgba(56,62,68,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* ─── MOTION GALLERY ─────────────────────────────────────────────────── */
+    .ds-motion-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .ds-motion-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 32px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .ds-motion-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #383E44;
+    }
+    .ds-motion-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #7A7A7A;
+      line-height: 1.5;
+    }
+    .ds-motion-demo {
+      margin-top: 8px;
+    }
+
+    /* ─── ANIMATIONS DEMO ─────────────────────────────────────────────────── */
+    @keyframes ds-fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .ds-anim-fadein {
+      animation: ds-fadeIn .6s ease forwards;
+    }
+    .ds-anim-trigger:hover .ds-anim-fadein-demo {
+      animation: ds-fadeIn .6s ease forwards;
+    }
+    .ds-anim-box {
+      height: 56px;
+      border-radius: 4px;
+      background: #E02F1A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    /* Hover lift/glow demo */
+    .ds-hover-lift {
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .ds-hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(224,47,26,0.25);
+    }
+
+    /* Button hover transition demo overlay */
+    .ds-btn-hover-demo {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* ─── SPACING RULER ──────────────────────────────────────────────────── */
+    .ds-spacing-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .ds-spacing-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .ds-spacing-bar {
+      background: rgba(224,47,26,0.15);
+      border: 1.5px solid #E02F1A;
+      border-radius: 2px;
+      width: 40px;
+    }
+    .ds-spacing-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: #7A7A7A;
+      letter-spacing: 1px;
+    }
+
+    /* ─── BUTTON (SECONDARY – "SAIBA MAIS") OVERRIDE FOR DEMO ───────────── */
+    /* The original site uses transparent bg buttons with red text/fill */
+    .elementor-button.elementor-button--demo-secondary {
+      background-color: transparent !important;
+      color: #E02F1A !important;
+      fill: #E02F1A !important;
+    }
+    /* Disabled state (not in original) */
+    .elementor-button.elementor-button--disabled {
+      opacity: 0.38 !important;
+      pointer-events: none !important;
+    }
+
+    /* ─── TABS DEMO ISOLATION ────────────────────────────────────────────── */
+    .ds-tabs-demo .e-n-tabs { width: 100%; }
+    .ds-tabs-demo .e-n-tab-title { cursor: pointer; }
+
+    /* ─── FORM DEMO WRAPPER ──────────────────────────────────────────────── */
+    .ds-form-demo {
+      max-width: 560px;
+    }
+
+    /* ─── GENERAL UTILITY ─────────────────────────────────────────────────── */
+    .ds-divider {
+      border: none;
+      border-top: 1px solid rgba(56,62,68,0.12);
+      margin: 0;
+    }
+
+    /* ─── SCROLLBAR SECTION OFFSET (sticky nav) ────────────────────────── */
+    section[id] {
+      scroll-margin-top: 52px;
+    }
+  </style>
+</head>
+
+<body class="home wp-singular page-template-default page page-id-672 wp-embed-responsive wp-theme-hello-elementor hello-elementor-default elementor-default elementor-template-full-width elementor-kit-4 elementor-page elementor-page-672" style="scroll-behavior: smooth;">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     DS NAV
+════════════════════════════════════════════════════════════════════════ -->
+<nav class="ds-nav" aria-label="Design System Navigation">
+  <div class="ds-nav__logo">
+    <img src="assets/SiteLogoEvcomX_e1c4bffc40ef.png" alt="EvcomX"/>
+    <span class="ds-nav__badge">Design System</span>
+  </div>
+  <ul class="ds-nav__links">
+    <li><a href="#hero">Hero</a></li>
+    <li><a href="#typography">Tipografia</a></li>
+    <li><a href="#colors">Cores</a></li>
+    <li><a href="#components">Componentes</a></li>
+    <li><a href="#layout">Layout</a></li>
+    <li><a href="#motion">Motion</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 0  —  HERO (EXACT CLONE, TEXT ADAPTED)
+════════════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="elementor elementor-672" data-elementor-id="672" data-elementor-post-type="page" data-elementor-type="wp-page">
+    <div class="elementor-element elementor-element-c6f346c e-flex e-con-boxed e-con e-parent e-lazyloaded"
+         data-e-type="container"
+         data-element_type="container"
+         data-id="c6f346c"
+         data-settings='{"background_background":"video","background_play_on_mobile":"yes"}'>
+      <div class="e-con-inner">
+        <div class="elementor-background-video-container">
+          <video
+            autoplay
+            class="elementor-background-video-hosted"
+            loop
+            muted
+            playsinline
+            role="presentation"
+            src="https://s.criacaostatic.cc/evcomxo0wd8sb/uploads/2024/10/Imagem-site-colete-laranja-1.mp4">
+          </video>
+        </div>
+
+        <!-- H1 – adapted for design system context, same markup & classes -->
+        <div class="elementor-element elementor-element-9922910 elementor-widget__width-initial elementor-widget elementor-widget-heading"
+             data-e-type="widget" data-element_type="widget" data-id="9922910" data-widget_type="heading.default">
+          <div class="elementor-widget-container">
+            <h1 class="elementor-heading-title elementor-size-default">DESIGN SYSTEM evcomx</h1>
+          </div>
+        </div>
+
+        <!-- Subtitle paragraph – same markup -->
+        <div class="elementor-element elementor-element-0284bce elementor-widget__width-initial elementor-widget elementor-widget-text-editor"
+             data-e-type="widget" data-element_type="widget" data-id="0284bce" data-widget_type="text-editor.default">
+          <div class="elementor-widget-container">
+            <p>Visual language, componentes e tokens que definem a identidade digital da EvcomX</p>
+          </div>
+        </div>
+
+        <!-- CTA button – same markup -->
+        <div class="elementor-element elementor-element-82fcac2 elementor-align-left elementor-widget elementor-widget-button"
+             data-e-type="widget" data-element_type="widget" data-id="82fcac2" data-widget_type="button.default">
+          <div class="elementor-widget-container">
+            <div class="elementor-button-wrapper">
+              <a class="elementor-button elementor-button-link elementor-size-sm" href="#typography">
+                <span class="elementor-button-content-wrapper">
+                  <span class="elementor-button-icon">
+                    <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
+                    </svg>
+                  </span>
+                  <span class="elementor-button-text">Explorar sistema</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.e-con-inner -->
+    </div><!-- /.elementor-element-c6f346c -->
+  </div><!-- /.elementor.elementor-672 -->
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 1  —  TYPOGRAPHY
+════════════════════════════════════════════════════════════════════════ -->
+<section id="typography" class="ds-section">
+  <div class="ds-section__inner">
+    <div class="ds-section__header">
+      <p class="ds-section__label">01 — Tipografia</p>
+      <h2 class="ds-section__title">ESCALA <font color="#E02F1A">TIPOGRÁFICA</font></h2>
+      <p class="ds-section__desc">Todas as variações que aparecem no site, na ordem de hierarchy. Fontes: Bai Jamjuree (títulos) e Inter (corpo, UI).</p>
+    </div>
+
+    <div class="elementor elementor-672">
+      <table class="ds-type-table">
+
+        <!-- H1 — Hero Heading (dark bg context) -->
+        <tr class="tr--dark">
+          <td class="td-name">Heading 1</td>
+          <td class="td-preview">
+            <div class="elementor-element elementor-element-9922910 elementor-widget elementor-widget-heading">
+              <div class="elementor-widget-container">
+                <h1 class="elementor-heading-title elementor-size-default">VIVEMOS GRANDES INDÚSTRIAS</h1>
+              </div>
+            </div>
+          </td>
+          <td class="td-spec" style="color:rgba(255,255,255,.35)">Bai Jamjuree · 56px / 65px · 600 · Uppercase</td>
+        </tr>
+
+        <!-- H2 — Section Heading -->
+        <tr>
+          <td class="td-name">Heading 2</td>
+          <td class="td-preview">
+            <div class="elementor-element elementor-element-f393adc elementor-widget elementor-widget-heading">
+              <div class="elementor-widget-container">
+                <h2 class="elementor-heading-title elementor-size-default">vivemos <font color="#E02F1A">matemática industrial</font></h2>
+              </div>
+            </div>
+          </td>
+          <td class="td-spec">Bai Jamjuree · 40px / 48px · 600 · Uppercase</td>
+        </tr>
+
+        <!-- H3 — Feature Card Heading -->
+        <tr>
+          <td class="td-name">Heading 3</td>
+          <td class="td-preview">
+            <div class="elementor-element elementor-element-580e31e elementor-widget elementor-widget-heading">
+              <div class="elementor-widget-container">
+                <h3 class="elementor-heading-title elementor-size-default">Otimização</h3>
+              </div>
+            </div>
+          </td>
+          <td class="td-spec">Inter · 20px / 35px · 400 · Regular</td>
+        </tr>
+
+        <!-- Stat Number — Large display figures -->
+        <tr>
+          <td class="td-name">Display<br/>Number</td>
+          <td class="td-preview">
+            <div class="elementor-element elementor-element-f921947 elementor-widget elementor-widget-heading">
+              <div class="elementor-widget-container">
+                <p class="elementor-heading-title elementor-size-default">+82%</p>
+              </div>
+            </div>
+          </td>
+          <td class="td-spec">Bai Jamjuree · 64px / 75px · 500 · ls −1.5px</td>
+        </tr>
+
+        <!-- Body Text -->
+        <tr>
+          <td class="td-name">Body Text</td>
+          <td class="td-preview">
+            <div class="elementor-widget-text-editor">
+              <p>Para resolver problemas complexos com soluções de software que utilizam matemática industrial de ponta</p>
+            </div>
+          </td>
+          <td class="td-spec">Inter · 18px / 1.4em · 400</td>
+        </tr>
+
+        <!-- Accent / UI Label -->
+        <tr>
+          <td class="td-name">Accent / UI</td>
+          <td class="td-preview">
+            <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;line-height:24px;letter-spacing:0.4px;color:#383E44;">
+              Solicitar uma apresentação
+            </span>
+          </td>
+          <td class="td-spec">Inter · 14px / 24px · 500 · ls 0.4px</td>
+        </tr>
+
+        <!-- Button Label -->
+        <tr>
+          <td class="td-name">Button<br/>Label</td>
+          <td class="td-preview">
+            <span style="font-family:'Inter',sans-serif;font-size:15px;font-weight:500;line-height:24px;letter-spacing:0.46px;color:#E02F1A;">
+              Nossas especialidades
+            </span>
+          </td>
+          <td class="td-spec">Inter · 15px / 24px · 500 · ls 0.46px</td>
+        </tr>
+
+        <!-- Form Field Text -->
+        <tr>
+          <td class="td-name">Form Field</td>
+          <td class="td-preview">
+            <span style="font-family:'Inter',sans-serif;font-size:16px;font-weight:400;line-height:24px;letter-spacing:0.15px;color:#383E44;">
+              Personalização da produção
+            </span>
+          </td>
+          <td class="td-spec">Inter · 16px / 24px · 400 · ls 0.15px</td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="ds-divider"/>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 2  —  COLORS & SURFACES
+════════════════════════════════════════════════════════════════════════ -->
+<section id="colors" class="ds-section">
+  <div class="ds-section__inner">
+    <div class="ds-section__header">
+      <p class="ds-section__label">02 — Cores &amp; Superfícies</p>
+      <h2 class="ds-section__title">PALETA <font color="#E02F1A">DE CORES</font></h2>
+      <p class="ds-section__desc">Tokens de cor mapeados diretamente das variáveis CSS Elementor globais da EvcomX.</p>
+    </div>
+
+    <!-- Brand Palette -->
+    <p style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#7A7A7A;margin:0 0 16px;">Brand</p>
+    <div class="ds-color-grid" style="margin-bottom:40px;">
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#E02F1A;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Brand Red</div>
+          <div class="ds-swatch__hex">#E02F1A</div>
+          <div class="ds-swatch__var">--e-global-color-primary</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">--e-global-color-accent</div>
+        </div>
+      </div>
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#AC2A1B;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Red Dark</div>
+          <div class="ds-swatch__hex">#AC2A1B</div>
+          <div class="ds-swatch__var">--e-global-color-2dfc3d4</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Hover / Pressed</div>
+        </div>
+      </div>
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#511710;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Red Deep</div>
+          <div class="ds-swatch__hex">#511710</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Hero overlay bg</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Neutrals -->
+    <p style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#7A7A7A;margin:0 0 16px;">Neutros</p>
+    <div class="ds-color-grid" style="margin-bottom:40px;">
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#383E44;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Slate Dark</div>
+          <div class="ds-swatch__hex">#383E44</div>
+          <div class="ds-swatch__var">--e-global-color-secondary</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Headings, dark text</div>
+        </div>
+      </div>
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#7A7A7A;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Gray Mid</div>
+          <div class="ds-swatch__hex">#7A7A7A</div>
+          <div class="ds-swatch__var">--e-global-color-text</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Body / muted text</div>
+        </div>
+      </div>
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#FFFFFF;border:1px solid #e8eaec;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">White</div>
+          <div class="ds-swatch__hex">#FFFFFF</div>
+          <div class="ds-swatch__var">--e-global-color-ec89267</div>
+        </div>
+      </div>
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#F6F6F6;border:1px solid #e8eaec;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Surface Light</div>
+          <div class="ds-swatch__hex">#F6F6F6</div>
+          <div class="ds-swatch__var">--e-global-color-eb843ae</div>
+        </div>
+      </div>
+
+      <div class="ds-swatch">
+        <div class="ds-swatch__color" style="background:#f4f7f9;border:1px solid #e8eaec;"></div>
+        <div class="ds-swatch__info">
+          <div class="ds-swatch__name">Section Bg</div>
+          <div class="ds-swatch__hex">#f4f7f9</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Content sections</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Surfaces / Backgrounds -->
+    <p style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#7A7A7A;margin:0 0 16px;">Gradientes &amp; Overlays</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+
+      <!-- Hero overlay -->
+      <div style="flex:1;min-width:240px;">
+        <div style="height:80px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#51171040 0%,#511710 100%);"></div>
+        <div style="background:#fff;padding:10px 14px;border-radius:0 0 4px 4px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+          <div class="ds-swatch__name">Hero Overlay</div>
+          <div class="ds-swatch__hex">#51171040 → #511710</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">mix-blend-mode: multiply</div>
+        </div>
+      </div>
+
+      <!-- Dark modal bg -->
+      <div style="flex:1;min-width:240px;">
+        <div style="height:80px;border-radius:4px 4px 0 0;background:rgba(0,0,0,0.8);"></div>
+        <div style="background:#fff;padding:10px 14px;border-radius:0 0 4px 4px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+          <div class="ds-swatch__name">Modal Overlay</div>
+          <div class="ds-swatch__hex">rgba(0,0,0,0.8)</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Cookie / popup backdrop</div>
+        </div>
+      </div>
+
+      <!-- Button gradient (inactive) -->
+      <div style="flex:1;min-width:240px;">
+        <div style="height:80px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,rgba(29,219,217,0) 0%,rgba(242,41,91,0) 100%);border:1px solid #e8eaec;"></div>
+        <div style="background:#fff;padding:10px 14px;border-radius:0 0 4px 4px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+          <div class="ds-swatch__name">Btn Bg Gradient</div>
+          <div class="ds-swatch__hex">linear-gradient(180° transparent)</div>
+          <div class="ds-swatch__var" style="color:#7A7A7A;">Default button bg (transparent)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="ds-divider"/>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 3  —  UI COMPONENTS
+════════════════════════════════════════════════════════════════════════ -->
+<section id="components" class="ds-section">
+  <div class="ds-section__inner">
+    <div class="ds-section__header">
+      <p class="ds-section__label">03 — Componentes UI</p>
+      <h2 class="ds-section__title">COMPONENTES <font color="#E02F1A">DE INTERFACE</font></h2>
+      <p class="ds-section__desc">Todos os elementos interativos que existem no site. Use as classes exatas.</p>
+    </div>
+
+    <div class="elementor elementor-672">
+
+      <!-- ── BUTTONS ──────────────────────────────────────────────────── -->
+      <div class="ds-component-block">
+        <p class="ds-component-block__label">Botões</p>
+        <div class="ds-states-row">
+
+          <!-- Default (Primary CTA - transparent bg + red text + arrow) -->
+          <div class="ds-state-item">
+            <span class="ds-state-label">Default</span>
+            <div class="elementor-element elementor-element-82fcac2 elementor-align-left elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-icon">
+                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                      </span>
+                      <span class="elementor-button-text">Nossas especialidades</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hover state -->
+          <div class="ds-state-item">
+            <span class="ds-state-label">Hover</span>
+            <div class="elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <a class="elementor-button elementor-button-link elementor-size-sm" href="#" style="background-color:#e02F1A0A;">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-icon">
+                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                      </span>
+                      <span class="elementor-button-text">Nossas especialidades</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit / Filled button (from form) -->
+          <div class="ds-state-item">
+            <span class="ds-state-label">Filled (Submit)</span>
+            <div class="elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <button class="elementor-button elementor-size-sm" type="button" style="background-color:#E02F1A;color:#fff;border:none;cursor:pointer;">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-text">Solicitar uma apresentação</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filled Hover -->
+          <div class="ds-state-item">
+            <span class="ds-state-label">Filled Hover</span>
+            <div class="elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <button class="elementor-button elementor-size-sm" type="button" style="background-color:#AC2A1B;color:#fff;border:none;cursor:pointer;">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-text">Solicitar uma apresentação</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cookie dismiss button -->
+          <div class="ds-state-item">
+            <span class="ds-state-label">Cookie CTA</span>
+            <div class="elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <a class="elementor-button elementor-button-link elementor-size-sm" href="#" style="background-color:#E02F1A;color:#fff;">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-text">Entendi</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled state -->
+          <div class="ds-state-item">
+            <span class="ds-state-label">Disabled</span>
+            <div class="elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <a class="elementor-button elementor-button-link elementor-size-sm elementor-button--disabled" href="#" tabindex="-1" aria-disabled="true">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-icon">
+                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                      </span>
+                      <span class="elementor-button-text">Saiba mais</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── TABS ─────────────────────────────────────────────────────── -->
+      <div class="ds-component-block ds-tabs-demo">
+        <p class="ds-component-block__label">Tabs (Nested Tabs)</p>
+        <div class="elementor-element elementor-element-ba2aab1 e-n-tabs-mobile elementor-widget elementor-widget-n-tabs"
+             data-e-type="widget" data-element_type="widget" data-id="ba2aab1"
+             data-settings='{"tabs_justify_horizontal":"start","horizontal_scroll":"disable"}'
+             data-widget_type="nested-tabs.default">
+          <div class="elementor-widget-container">
+            <div class="e-n-tabs" data-widget-number="195209905">
+              <div class="e-n-tabs-heading" role="tablist">
+                <button aria-controls="ds-tab-content-1" aria-selected="true"
+                        class="e-n-tab-title"
+                        data-tab-index="1" id="ds-tab-title-1" role="tab"
+                        style="--n-tabs-title-order:1;" tabindex="0"
+                        onclick="dsActivateTab(1, this)">
+                  <span class="e-n-tab-title-text">Gerdau</span>
+                </button>
+                <button aria-controls="ds-tab-content-2" aria-selected="false"
+                        class="e-n-tab-title"
+                        data-tab-index="2" id="ds-tab-title-2" role="tab"
+                        style="--n-tabs-title-order:2;" tabindex="-1"
+                        onclick="dsActivateTab(2, this)">
+                  <span class="e-n-tab-title-text">Petrobras</span>
+                </button>
+                <button aria-controls="ds-tab-content-3" aria-selected="false"
+                        class="e-n-tab-title"
+                        data-tab-index="3" id="ds-tab-title-3" role="tab"
+                        style="--n-tabs-title-order:3;" tabindex="-1"
+                        onclick="dsActivateTab(3, this)">
+                  <span class="e-n-tab-title-text">Porto Sudeste</span>
+                </button>
+                <button aria-controls="ds-tab-content-4" aria-selected="false"
+                        class="e-n-tab-title"
+                        data-tab-index="4" id="ds-tab-title-4" role="tab"
+                        style="--n-tabs-title-order:4;" tabindex="-1"
+                        onclick="dsActivateTab(4, this)">
+                  <span class="e-n-tab-title-text">Anglo American</span>
+                </button>
+                <button aria-controls="ds-tab-content-5" aria-selected="false"
+                        class="e-n-tab-title"
+                        data-tab-index="5" id="ds-tab-title-5" role="tab"
+                        style="--n-tabs-title-order:5;" tabindex="-1"
+                        onclick="dsActivateTab(5, this)">
+                  <span class="e-n-tab-title-text">Usiminas</span>
+                </button>
+              </div>
+              <div class="e-n-tabs-content">
+                <div id="ds-tab-content-1" class="e-active elementor-element e-con-full e-flex e-con e-child"
+                     data-tab-index="1" role="tabpanel" aria-labelledby="ds-tab-title-1"
+                     style="--n-tabs-title-order:1;padding:32px 0;">
+                  <div class="elementor-widget-container" style="max-width:540px;">
+                    <div class="elementor-widget-text-editor">
+                      <p>A siderúrgica brasileira Gerdau atinge um marco histórico ao estabelecer um novo padrão de precisão no controle de temperatura.</p>
+                    </div>
+                  </div>
+                </div>
+                <div id="ds-tab-content-2" class="elementor-element e-con-full e-flex e-con e-child"
+                     data-tab-index="2" role="tabpanel" aria-labelledby="ds-tab-title-2"
+                     style="--n-tabs-title-order:2;padding:32px 0;display:none;">
+                  <div class="elementor-widget-container" style="max-width:540px;">
+                    <div class="elementor-widget-text-editor">
+                      <p>A Petrobras avança na digitalização de seus processos industriais com soluções de otimização matemática de ponta.</p>
+                    </div>
+                  </div>
+                </div>
+                <div id="ds-tab-content-3" class="elementor-element e-con-full e-flex e-con e-child"
+                     data-tab-index="3" role="tabpanel" aria-labelledby="ds-tab-title-3"
+                     style="--n-tabs-title-order:3;padding:32px 0;display:none;">
+                  <div class="elementor-widget-container" style="max-width:540px;">
+                    <div class="elementor-widget-text-editor">
+                      <p>O Porto Sudeste implementa controle avançado em suas operações logísticas portuárias.</p>
+                    </div>
+                  </div>
+                </div>
+                <div id="ds-tab-content-4" class="elementor-element e-con-full e-flex e-con e-child"
+                     data-tab-index="4" role="tabpanel" aria-labelledby="ds-tab-title-4"
+                     style="--n-tabs-title-order:4;padding:32px 0;display:none;">
+                  <div class="elementor-widget-container" style="max-width:540px;">
+                    <div class="elementor-widget-text-editor">
+                      <p>A Anglo American otimiza seu processo de beneficiamento mineral com algoritmos proprietários EvcomX.</p>
+                    </div>
+                  </div>
+                </div>
+                <div id="ds-tab-content-5" class="elementor-element e-con-full e-flex e-con e-child"
+                     data-tab-index="5" role="tabpanel" aria-labelledby="ds-tab-title-5"
+                     style="--n-tabs-title-order:5;padding:32px 0;display:none;">
+                  <div class="elementor-widget-container" style="max-width:540px;">
+                    <div class="elementor-widget-text-editor">
+                      <p>Usiminas transforma a produção siderúrgica com controle preditivo em seus altos-fornos.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FORM FIELDS ─────────────────────────────────────────────── -->
+      <div class="ds-component-block">
+        <p class="ds-component-block__label">Formulário (Multi-step)</p>
+        <div class="ds-form-demo elementor-element elementor-element-aa4da43">
+          <div class="elementor-widget-container" style="background:#fff;padding:40px;border-radius:4px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <!-- Default input -->
+              <div class="elementor-field-group elementor-column elementor-col-50"
+                   style="display:flex;flex-direction:column;gap:6px;">
+                <label class="elementor-field-label" style="font-family:'Inter',sans-serif;font-size:12px;color:#7A7A7A;">Nome</label>
+                <input class="elementor-field elementor-size-sm elementor-field-textual"
+                       placeholder="Nome" type="text" style="width:100%;box-sizing:border-box;"/>
+              </div>
+              <!-- Focus state -->
+              <div class="elementor-field-group elementor-column elementor-col-50"
+                   style="display:flex;flex-direction:column;gap:6px;">
+                <label class="elementor-field-label" style="font-family:'Inter',sans-serif;font-size:12px;color:#7A7A7A;">Cargo</label>
+                <input class="elementor-field elementor-size-sm elementor-field-textual"
+                       placeholder="Cargo" type="text"
+                       style="width:100%;box-sizing:border-box;outline:2px solid #E02F1A;outline-offset:-1px;"/>
+              </div>
+              <!-- Select -->
+              <div class="elementor-field-type-select elementor-field-group elementor-column elementor-col-100"
+                   style="grid-column:1/-1;">
+                <label class="elementor-field-label" style="font-family:'Inter',sans-serif;font-size:12px;color:#7A7A7A;">Solução de maior interesse</label>
+                <div class="elementor-field elementor-select-wrapper remove-before" style="margin-top:4px;">
+                  <div class="select-caret-down-wrapper">
+                    <svg aria-hidden="true" class="e-font-icon-svg e-eicon-caret-down" viewBox="0 0 571.4 571.4" xmlns="http://www.w3.org/2000/svg"><path d="M571 393Q571 407 561 418L311 668Q300 679 286 679T261 668L11 418Q0 407 0 393T11 368 36 357H536Q550 357 561 368T571 393Z"></path></svg>
+                  </div>
+                  <select class="elementor-field-textual elementor-size-sm" style="width:100%;">
+                    <option>Personalização da produção</option>
+                    <option>Otimização de aditivos</option>
+                    <option>Otimização de misturas</option>
+                    <option>Controle e otimização de processos</option>
+                    <option>Manutenção de ativos</option>
+                    <option>EvcomX Lab</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- Submit button -->
+            <div class="elementor-field-group elementor-column elementor-field-type-submit elementor-col-100 e-form__buttons"
+                 style="margin-top:24px;">
+              <button class="elementor-button elementor-size-sm" type="button"
+                      style="cursor:pointer;border:none;background-color:#E02F1A;color:#fff;">
+                <span class="elementor-button-content-wrapper">
+                  <span class="elementor-button-text">Solicitar uma apresentação</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.elementor.elementor-672 -->
+  </div>
+</section>
+
+<hr class="ds-divider"/>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 4  —  LAYOUT & SPACING
+════════════════════════════════════════════════════════════════════════ -->
+<section id="layout" class="ds-section">
+  <div class="ds-section__inner">
+    <div class="ds-section__header">
+      <p class="ds-section__label">04 — Layout &amp; Espaçamento</p>
+      <h2 class="ds-section__title">LAYOUTS <font color="#E02F1A">E GRADES</font></h2>
+      <p class="ds-section__desc">Padrões de container, grid e padding usados nas seções do site.</p>
+    </div>
+
+    <!-- Spacing scale -->
+    <div class="ds-component-block">
+      <p class="ds-component-block__label">Escala de Espaçamento</p>
+      <div class="ds-spacing-row">
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:8px;"></div>
+          <span class="ds-spacing-label">8px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:16px;"></div>
+          <span class="ds-spacing-label">16px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:20px;"></div>
+          <span class="ds-spacing-label">20px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:24px;"></div>
+          <span class="ds-spacing-label">24px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:32px;"></div>
+          <span class="ds-spacing-label">32px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:40px;"></div>
+          <span class="ds-spacing-label">40px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:60px;"></div>
+          <span class="ds-spacing-label">60px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:80px;"></div>
+          <span class="ds-spacing-label">80px</span>
+        </div>
+        <div class="ds-spacing-item">
+          <div class="ds-spacing-bar" style="height:100px;width:60px;"></div>
+          <span class="ds-spacing-label">200px<br/>(hero v-pad)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Pattern 1: Hero Layout -->
+    <div class="ds-layout-pattern">
+      <p class="ds-layout-label">Padrão 1 — Hero (vídeo de fundo + conteúdo centrado)</p>
+      <div class="ds-layout-frame">
+        <div class="elementor elementor-672">
+          <div class="elementor-element elementor-element-c6f346c e-flex e-con-boxed e-con e-parent e-lazyloaded"
+               style="min-height:320px;background-color:#51171040;overflow:hidden;position:relative;">
+            <div class="e-con-inner" style="position:relative;z-index:1;max-width:1140px;margin:0 auto;display:flex;flex-direction:column;justify-content:center;padding:60px 40px;">
+              <div class="elementor-element elementor-element-9922910 elementor-widget elementor-widget-heading">
+                <div class="elementor-widget-container">
+                  <h1 class="elementor-heading-title elementor-size-default" style="max-width:542px;">VIVEMOS grandes indústrias</h1>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-0284bce elementor-widget elementor-widget-text-editor">
+                <div class="elementor-widget-container">
+                  <p>Para resolver problemas complexos com soluções de software que utilizam matemática industrial de ponta</p>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-82fcac2 elementor-align-left elementor-widget elementor-widget-button">
+                <div class="elementor-widget-container">
+                  <div class="elementor-button-wrapper">
+                    <a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+                      <span class="elementor-button-content-wrapper">
+                        <span class="elementor-button-icon">
+                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                        </span>
+                        <span class="elementor-button-text">Nossas especialidades</span>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:8px 16px;background:#f0f0f0;font-family:'Inter',sans-serif;font-size:11px;color:#7A7A7A;letter-spacing:.5px;">
+          Container max-width: 1140px · v-padding: 200px · flex-direction: column · justify-content: center
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Pattern 2: 4-col Feature Grid -->
+    <div class="ds-layout-pattern">
+      <p class="ds-layout-label">Padrão 2 — Grade de features (4 colunas, gap 24px)</p>
+      <div class="ds-layout-frame">
+        <div class="elementor elementor-672">
+          <div style="max-width:1140px;margin:0 auto;padding:40px;">
+            <div class="elementor-element elementor-element-8734ced e-flex e-con e-parent"
+                 style="display:flex;flex-direction:row;flex-wrap:wrap;gap:24px;">
+              <!-- Feature cards × 4 -->
+              <div class="elementor-element elementor-element-ee4822e e-con-full e-flex e-con e-child"
+                   style="flex:1;min-width:200px;background:#f4f7f9;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px;">
+                <div class="elementor-element elementor-element-580e31e elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <h3 class="elementor-heading-title elementor-size-default">Otimização</h3>
+                  </div>
+                </div>
+                <div class="elementor-element elementor-element-f921947 elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <p class="elementor-heading-title elementor-size-default">1m ton</p>
+                  </div>
+                </div>
+                <div class="elementor-widget-text-editor"><p>Cuidamos de 1 milhão de toneladas de minério de ferro</p></div>
+              </div>
+              <div class="elementor-element e-con-full e-flex e-con e-child"
+                   style="flex:1;min-width:200px;background:#f4f7f9;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px;">
+                <div class="elementor-element elementor-element-580e31e elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <h3 class="elementor-heading-title elementor-size-default">Flexibilização</h3>
+                  </div>
+                </div>
+                <div class="elementor-element elementor-element-f921947 elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <p class="elementor-heading-title elementor-size-default">+82%</p>
+                  </div>
+                </div>
+                <div class="elementor-widget-text-editor"><p>De redução média de dispersão de material</p></div>
+              </div>
+              <div class="elementor-element e-con-full e-flex e-con e-child"
+                   style="flex:1;min-width:200px;background:#f4f7f9;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px;">
+                <div class="elementor-element elementor-element-580e31e elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <h3 class="elementor-heading-title elementor-size-default">Sustentabilidade</h3>
+                  </div>
+                </div>
+                <div class="elementor-element elementor-element-f921947 elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <p class="elementor-heading-title elementor-size-default">500+</p>
+                  </div>
+                </div>
+                <div class="elementor-widget-text-editor"><p>Distribuidores economizados</p></div>
+              </div>
+              <div class="elementor-element e-con-full e-flex e-con e-child"
+                   style="flex:1;min-width:200px;background:#f4f7f9;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px;">
+                <div class="elementor-element elementor-element-580e31e elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <h3 class="elementor-heading-title elementor-size-default">Manutenção</h3>
+                  </div>
+                </div>
+                <div class="elementor-element elementor-element-f921947 elementor-widget elementor-widget-heading">
+                  <div class="elementor-widget-container">
+                    <p class="elementor-heading-title elementor-size-default">+300k</p>
+                  </div>
+                </div>
+                <div class="elementor-widget-text-editor"><p>Manutenções supervisionadas</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:8px 16px;background:#f0f0f0;font-family:'Inter',sans-serif;font-size:11px;color:#7A7A7A;letter-spacing:.5px;">
+          flex-direction: row · flex-wrap: wrap · gap: 24px · child flex: 1 min-width: 200px
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Pattern 3: Logos row -->
+    <div class="ds-layout-pattern">
+      <p class="ds-layout-label">Padrão 3 — Logos row (parceiros, align-items: center)</p>
+      <div class="ds-layout-frame">
+        <div style="background:#fff;padding:40px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;justify-content:center;">
+          <img src="assets/siteEvcomXMarcaPetrobras_0f98015c1d5f.png" alt="Petrobras" height="40" style="opacity:.7;filter:grayscale(100%);"/>
+          <img src="assets/siteEvcomXMarcaGerdau_410bb6069c9e.png" alt="Gerdau" height="40" style="opacity:.7;filter:grayscale(100%);"/>
+          <img src="assets/siteEvcomXMarcaBraskem_c23db290dc20.png" alt="Braskem" height="40" style="opacity:.7;filter:grayscale(100%);"/>
+          <img src="assets/siteEvcomXMarcaUsiminas-1_8c99c863f876.png" alt="Usiminas" height="40" style="opacity:.7;filter:grayscale(100%);"/>
+          <img src="assets/siteEvcomXMarcaAngloamerican_6845f581bdf8.png" alt="Anglo American" height="40" style="opacity:.7;filter:grayscale(100%);"/>
+        </div>
+        <div style="padding:8px 16px;background:#f0f0f0;font-family:'Inter',sans-serif;font-size:11px;color:#7A7A7A;letter-spacing:.5px;">
+          display: flex · align-items: center · gap: 40px · flex-wrap: wrap · justify-content: center · padding: 60px
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="ds-divider"/>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 5  —  MOTION & INTERACTION
+════════════════════════════════════════════════════════════════════════ -->
+<section id="motion" class="ds-section">
+  <div class="ds-section__inner">
+    <div class="ds-section__header">
+      <p class="ds-section__label">05 — Motion &amp; Interação</p>
+      <h2 class="ds-section__title">ANIMAÇÕES <font color="#E02F1A">E TRANSIÇÕES</font></h2>
+      <p class="ds-section__desc">Todos os comportamentos de movimento presentes no site. Hover nos cards abaixo para ver as demos.</p>
+    </div>
+
+    <div class="ds-motion-grid">
+
+      <!-- Entrance: Elementor fadeIn -->
+      <div class="ds-motion-card">
+        <div class="ds-motion-name">Entrance — fadeIn</div>
+        <div class="ds-motion-desc">
+          Containers com <code>data-settings='{"animation":"fadeIn"}'</code> usam a classe <code>elementor-invisible</code> antes do scroll e disparam este keyframe ao entrar no viewport.
+        </div>
+        <div class="ds-motion-demo">
+          <button onclick="triggerFadeIn(this)"
+                  style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#E02F1A;background:transparent;border:1px solid #E02F1A;border-radius:3px;padding:6px 14px;cursor:pointer;margin-bottom:12px;">
+            Replay ↺
+          </button>
+          <div id="fadein-demo"
+               style="padding:20px;background:#f4f7f9;border-radius:4px;border-left:3px solid #E02F1A;">
+            <div class="elementor-widget-text-editor">
+              <p>Cuidamos de 1 milhão de toneladas de minério de ferro</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hover lift/glow -->
+      <div class="ds-motion-card">
+        <div class="ds-motion-name">Hover Lift / Glow</div>
+        <div class="ds-motion-desc">
+          Cards e image-boxes usam <code>transition-duration: .3s</code>. Hover eleva o elemento e adiciona sombra vermelha difusa.
+        </div>
+        <div class="ds-motion-demo">
+          <div class="ds-hover-lift"
+               style="padding:20px;background:#f4f7f9;border-radius:4px;cursor:pointer;">
+            <div class="elementor-widget-text-editor">
+              <p>Passe o mouse para ver o lift demo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button hover transition -->
+      <div class="ds-motion-card">
+        <div class="ds-motion-name">Button Hover</div>
+        <div class="ds-motion-desc">
+          Botão transparente: <code>background-color</code> faz transição de <code>transparent</code> para <code>#e02F1A0A</code> (red 4%). Botão filled: <code>#E02F1A</code> → <code>#AC2A1B</code>.
+        </div>
+        <div class="ds-motion-demo">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="elementor-element elementor-element-82fcac2 elementor-widget elementor-widget-button">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+                    <span class="elementor-button-content-wrapper">
+                      <span class="elementor-button-icon">
+                        <svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+                      </span>
+                      <span class="elementor-button-text">Saiba mais</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <button class="elementor-button elementor-size-sm" type="button"
+                    style="cursor:pointer;border:none;font-family:'Inter',sans-serif;background-color:#E02F1A;color:#fff;transition:background-color .3s ease;"
+                    onmouseenter="this.style.backgroundColor='#AC2A1B'"
+                    onmouseleave="this.style.backgroundColor='#E02F1A'">
+              <span class="elementor-button-content-wrapper">
+                <span class="elementor-button-text">Solicitar apresentação</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popup slideInUp -->
+      <div class="ds-motion-card">
+        <div class="ds-motion-name">Popup Entrance — slideInUp</div>
+        <div class="ds-motion-desc">
+          O popup de cookies usa <code>entrance_animation: "slideInUp"</code> com duração <code>0.4s</code>. Box-shadow: <code>2px 8px 23px 3px rgba(0,0,0,.2)</code>.
+        </div>
+        <div class="ds-motion-demo">
+          <button onclick="triggerPopupDemo()"
+                  style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#E02F1A;background:transparent;border:1px solid #E02F1A;border-radius:3px;padding:6px 14px;cursor:pointer;margin-bottom:12px;">
+            Preview ↺
+          </button>
+          <div id="popup-demo" style="overflow:hidden;border-radius:4px;">
+            <div id="popup-demo-inner"
+                 style="padding:20px 24px;background:#383E44;border-radius:4px;box-shadow:2px 8px 23px 3px rgba(0,0,0,.2);transform:translateY(100%);transition:transform .4s ease;">
+              <div class="elementor-widget-text-editor" style="margin-bottom:12px;">
+                <p style="color:#fff;margin:0;">Utilizamos cookies para melhorar a sua experiência em nosso site.</p>
+              </div>
+              <a class="elementor-button elementor-button-link elementor-size-sm"
+                 style="background-color:#E02F1A;color:#fff;display:inline-flex;" href="#">
+                <span class="elementor-button-content-wrapper">
+                  <span class="elementor-button-text">Entendi</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image transition -->
+      <div class="ds-motion-card">
+        <div class="ds-motion-name">Image Box Transition</div>
+        <div class="ds-motion-desc">
+          Imagens dentro de <code>.elementor-image-box-img</code> usam <code>transition-duration: .3s</code>. Suave escala/opacidade no hover.
+        </div>
+        <div class="ds-motion-demo">
+          <div style="width:80px;height:60px;overflow:hidden;border-radius:4px;">
+            <img src="assets/siteEvcomXMarcaGerdau_410bb6069c9e.png" alt="Gerdau"
+                 style="width:100%;height:auto;transition:transform .3s ease,opacity .3s ease;filter:grayscale(100%);"
+                 onmouseenter="this.style.transform='scale(1.08)';this.style.opacity='.7'"
+                 onmouseleave="this.style.transform='scale(1)';this.style.opacity='1'"/>
+          </div>
+          <p style="font-family:'Inter',sans-serif;font-size:12px;color:#7A7A7A;margin-top:8px;">Hover na imagem ↑</p>
+        </div>
+      </div>
+
+      <!-- Tab transition -->
+      <div class="ds-motion-card">
+        <div class="ds-motion-name">Tab Active Highlight</div>
+        <div class="ds-motion-desc">
+          As tabs (<code>.e-n-tab-title</code>) transitam <code>background</code> de <code>transparent</code> para <code>#E02F1A</code> no estado <code>[aria-selected=true]</code>.
+        </div>
+        <div class="ds-motion-demo">
+          <div style="display:flex;gap:4px;">
+            <button style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:8px 16px;border:none;background:#E02F1A;color:#fff;border-radius:3px;cursor:default;">Ativo</button>
+            <button style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:8px 16px;border:1px solid rgba(56,62,68,0.2);background:transparent;color:#383E44;border-radius:3px;cursor:default;">Inativo</button>
+          </div>
+          <p style="font-family:'Inter',sans-serif;font-size:11px;color:#7A7A7A;margin-top:8px;">transition: background .2s ease</p>
+        </div>
+      </div>
+
+    </div><!-- /.ds-motion-grid -->
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════════════ -->
+<footer style="background:#0d0d0d;padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+  <img src="assets/SiteLogoEvcomX_e1c4bffc40ef.png" alt="EvcomX" style="height:24px;width:auto;opacity:.7;"/>
+  <span style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px;">DESIGN SYSTEM · v1.0</span>
+  <a href="index.html" style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.5px;">← Voltar ao site</a>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════════════════════ -->
+<script>
+/* ── Lightweight tab activation (replaces Elementor JS for static demos) ─ */
+function dsActivateTab(index, btn) {
+  const container = btn.closest('.e-n-tabs');
+  // deactivate all buttons
+  container.querySelectorAll('.e-n-tab-title').forEach(function(b) {
+    b.setAttribute('aria-selected', 'false');
+    b.setAttribute('tabindex', '-1');
+  });
+  // activate clicked
+  btn.setAttribute('aria-selected', 'true');
+  btn.setAttribute('tabindex', '0');
+
+  // hide all panels
+  container.querySelectorAll('.e-n-tabs-content > [role="tabpanel"]').forEach(function(p) {
+    p.style.display = 'none';
+    p.classList.remove('e-active');
+  });
+  // show target panel
+  var panel = container.querySelector('#ds-tab-content-' + index);
+  if (panel) {
+    panel.style.display = 'flex';
+    panel.style.flexDirection = 'column';
+    panel.classList.add('e-active');
+  }
+}
+
+/* ── fadeIn replay ──────────────────────────────────────────────────────── */
+function triggerFadeIn(btn) {
+  var el = document.getElementById('fadein-demo');
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = 'ds-fadeIn .6s ease forwards';
+}
+
+/* ── popup slideInUp demo ───────────────────────────────────────────────── */
+function triggerPopupDemo() {
+  var inner = document.getElementById('popup-demo-inner');
+  inner.style.transition = 'none';
+  inner.style.transform = 'translateY(100%)';
+  inner.offsetHeight; // reflow
+  inner.style.transition = 'transform .4s ease';
+  inner.style.transform = 'translateY(0)';
+}
+
+/* ── Init on load ───────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  // Trigger popup demo on load with a delay
+  setTimeout(triggerPopupDemo, 400);
+  // Trigger fadeIn demo
+  setTimeout(function() {
+    var el = document.getElementById('fadein-demo');
+    el.style.animation = 'ds-fadeIn .6s ease forwards';
+  }, 200);
+});
+</script>
+
+</body>
+</html>
